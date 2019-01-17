@@ -1,4 +1,4 @@
-#coding:utf-8
+# coding:utf-8
 from config.DBInfo import SessionFactory
 from db.item import Item
 from spider import api
@@ -6,7 +6,7 @@ from config import cityList
 
 citylist = cityList.getCityList()
 
-kw = ['php', 'java']
+kw = ['php', 'java', 'python']
 length = 50
 
 
