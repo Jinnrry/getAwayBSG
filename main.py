@@ -1,3 +1,4 @@
+#coding:utf-8
 from config.DBInfo import SessionFactory
 from db.item import Item
 from spider import api
@@ -31,16 +32,18 @@ def saveData(item):
     # 创建新User对象:
     new_data = Item(item)
     # 添加到session:
-    # session.add(new_data)
+    session.add(new_data)
     # 提交即保存到数据库:
-    # session.commit()
+    try:
+        session.commit()
+    except:
+        pass
     # 关闭session:
     session.close()
-    print(item)
-    exit()
 
 
 for city in citylist:
+    print(city['name'])
     for k in kw:
         start = 0
         total = 0

@@ -1,9 +1,12 @@
 import json
+import random
+from time import sleep
 
 import requests
 
 
 def get(url):
+    sleep(random.randint(0,5))
     return requests.get(url)
 
 
