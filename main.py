@@ -1,6 +1,10 @@
+from config.DBInfo import SessionFactory
+from db.item import Item
 from spider import api
+from config import cityList
 
-citylist = ['530', '601']
+citylist = cityList.getCityList()
+
 kw = ['php', 'java']
 length = 50
 
@@ -19,14 +23,28 @@ def avgSalary(info):
             a = 0
         total += a
     return (int)(total / len(infos))
-def saveData(item):
-    print(item)
 
-for cityid in citylist:
+
+def saveData(item):
+    # 创建session对象:
+    session = SessionFactory()
+    # 创建新User对象:
+    new_data = Item(item)
+    # 添加到session:
+    # session.add(new_data)
+    # 提交即保存到数据库:
+    # session.commit()
+    # 关闭session:
+    session.close()
+    print(item)
+    exit()
+
+
+for city in citylist:
     for k in kw:
         start = 0
         total = 0
-        res = api.getList(cityid, k, start, length)
+        res = api.getList(city['code'], k, start, length)
         while True:
             if res['code'] == 200:
                 total = res['data']['numTotal']
@@ -50,8 +68,6 @@ for cityid in citylist:
                     }
                     saveData(data)
                 if total > start + length:
-                    res = api.getList(cityid, k, start, length)
+                    res = api.getList(city['code'], k, start, length)
                 else:
                     break
-
-
