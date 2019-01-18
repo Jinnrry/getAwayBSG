@@ -6,7 +6,7 @@ from config import cityList
 
 citylist = cityList.getCityList()
 
-kw = ['php', 'java', 'python']
+kw = ['php', 'java', 'python','c/c++','c#','mysql','oracle','javascript','linux','SQL','软件','程序员']
 length = 50
 
 
