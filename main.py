@@ -37,7 +37,9 @@ def saveData(item):
     try:
         session.commit()
     except Exception as e:
-        print(e)
+        #print(e)
+        pass
+
 
     # 关闭session:
     session.close()
