@@ -6,7 +6,7 @@ from config import cityList
 
 citylist = cityList.getCityList()
 
-kw = ['php', 'java', 'python','c/c++','c#','mysql','oracle','javascript','linux','SQL','软件','程序员']
+kw = ['php', 'java', 'python', 'c/c++', 'c#', 'mysql', 'oracle', 'javascript', 'linux', 'SQL', '软件', '程序员']
 length = 50
 
 
@@ -69,6 +69,8 @@ for city in citylist:
                         'city': item['city']['items'][0]['name'],
                         'salary': item['salary'],
                         'avgsalary': avgSalary(item['salary']),
+                        'keyword': k,
+                        'industry': 'it'
                     }
                     saveData(data)
                 if total > start + length:

@@ -26,6 +26,8 @@ class Item(Base):
     city = Column(String(15))
     salary = Column(String(20))
     avgsalary = Column(Integer)
+    keyword=Column(String(20))
+    industry=Column(String(20))
 
     def __init__(self,data):
         for key in data.keys():
@@ -59,3 +61,7 @@ class Item(Base):
                 self.salary=data[key]
             if key == 'avgsalary':
                 self.avgsalary=data[key]
+            if key == 'keyword':
+                self.keyword=data[key]
+            if key == 'industry':
+                self.industry=data[key]
