@@ -6,7 +6,7 @@ from config import cityList
 
 citylist = cityList.getCityList()
 
-kw = ['php', 'java', 'python', 'c/c++', 'c#', 'mysql', 'oracle', 'javascript', 'linux', 'SQL', '软件', '程序员']
+kw = ['php', 'java', 'python', 'c/c++', 'c%23', 'mysql', 'oracle', 'javascript', 'linux', 'SQL', '软件', '程序员']
 length = 50
 
 
@@ -80,3 +80,5 @@ for city in citylist:
                     res = api.getList(city['code'], k, start, length)
                 else:
                     break
+            else:
+                break
