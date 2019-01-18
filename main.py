@@ -48,6 +48,7 @@ def saveData(item):
 for city in citylist:
     print(city['name'])
     for k in kw:
+        print(k)
         start = 0
         total = 0
         res = api.getList(city['code'], k, start, length)
