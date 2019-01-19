@@ -3,10 +3,10 @@ from config.DBInfo import SessionFactory
 from db.item import Item
 from spider import api
 from config import cityList
-
+from config import keys
 citylist = cityList.getCityList()
 
-kw = ['php', 'java', 'python', 'c/c++', 'c#', 'mysql', 'oracle', 'javascript', 'linux', 'SQL', '软件', '程序员']
+kw = keys.getKeys()
 length = 50
 
 
@@ -37,18 +37,26 @@ def saveData(item):
     try:
         session.commit()
     except Exception as e:
-        #print(e)
-        pass
-
+        if 'Duplicate' in repr(e):
+            pass
+            session.close()
+            return False
+        else:
+            print(e)
+            session.close()
+            return False
 
     # 关闭session:
     session.close()
+    return True
 
 
+allnum = 0
 for city in citylist:
     print(city['name'])
     for k in kw:
         print(k)
+        print("已抓取" + str(allnum))
         start = 0
         total = 0
         res = api.getList(city['code'], k, start, length)
@@ -75,7 +83,8 @@ for city in citylist:
                         'keyword': k,
                         'industry': 'it'
                     }
-                    saveData(data)
+                    if saveData(data):
+                        allnum += 1
                 if total > start + length:
                     res = api.getList(city['code'], k, start, length)
                 else:

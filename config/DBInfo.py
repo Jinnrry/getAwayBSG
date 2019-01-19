@@ -2,6 +2,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+
+
+#数据库设置
 engine = create_engine(
         "mysql+pymysql://root:78667602@127.0.0.1:3306/zhaopin?charset=utf8",
         max_overflow=20,  # 超过连接池大小外最多创建的连接
