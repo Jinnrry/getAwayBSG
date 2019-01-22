@@ -20,11 +20,22 @@ class CityListSpider(scrapy.Spider):
 
     def mainPage(self, response):
         title = response.xpath('//title/text()').extract()
-
         if "|成交查询" in title[0]:
+            areaList = response.selector.css('.position a::attr(href)').extract()
+            for url in areaList:
+                if "https://" in url:
+                    yield Request(url, callback=self.getList)
+                else:
+                    yield Request(response.url + url.split('/')[2], callback=self.getList)
             yield Request(response.url + "pg1/", callback=self.getList)
 
     def getList(self, response):
+        areaList = response.selector.css('.position a::attr(href)').extract()
+        for url in areaList:
+            if "https://" in url:
+                yield Request(url, callback=self.getList)
+            else:
+                yield Request(self.buildUlr(response.url.split('/')) + url.split('/')[2], callback=self.getList)
         infourl = response.selector.css('.listContent .title  a::attr(href)').extract()
         for url in infourl:
             yield Request(url, callback=self.detail)
