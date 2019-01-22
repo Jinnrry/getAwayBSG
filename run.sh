@@ -1,3 +1,3 @@
 #!/bin/bash
-scrapy crawl citylist
+scrapy crawl lianjia
 /usr/bin/python3 main.py
