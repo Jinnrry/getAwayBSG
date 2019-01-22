@@ -13,6 +13,7 @@ def get(url):
         return requests.get(url, timeout=10)
 
 
+# 智联招聘取列表的接口
 def getList(cityid, kw, start, length):
     kw=quote(kw, 'utf-8')
 
