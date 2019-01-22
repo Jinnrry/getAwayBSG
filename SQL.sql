@@ -25,12 +25,23 @@ CREATE TABLE `item` (
 
 CREATE TABLE `lianjia_transaction` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
- `transactiondate` datetime NOT NULL,
- `zqtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
- `price` double NOT NULL,
- `avgPrice` double NOT NULL,
- `ljID` double NOT NULL,
- `address` varchar(255) COLLATE utf8_bin NOT NULL,
+ `transactiondate` datetime NOT NULL COMMENT '成交时间',
+ `zqtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '抓取时间',
+ `price` double NOT NULL COMMENT '成交价格',
+ `avgPrice` double NOT NULL COMMENT '每平米价格',
+ `ljID` double NOT NULL COMMENT '链家ID',
+ `address` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '地址',
+ `address1` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+ `address2` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+ `address3` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+ `address4` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+ `address5` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+ `address6` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+ `address7` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+ `address8` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+ `address9` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+ `address10` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+ `url` varchar(500) COLLATE utf8_bin DEFAULT NULL,
  PRIMARY KEY (`id`),
- UNIQUE KEY `ljID` (`ljID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+ UNIQUE KEY `ljID` (`ljID`),
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
