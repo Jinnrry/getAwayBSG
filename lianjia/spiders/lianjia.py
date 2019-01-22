@@ -7,8 +7,8 @@ from config.DBInfo import SessionFactory
 from db.transaction import lianjia_transaction
 
 
-class CityListSpider(scrapy.Spider):
-    name = "citylist"
+class LianJiaSpider(scrapy.Spider):
+    name = "lianjia"
     start_urls = [
         "https://www.lianjia.com/city/"
     ]
