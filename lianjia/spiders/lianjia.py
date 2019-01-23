@@ -1,5 +1,6 @@
 import json
-
+import re
+from urllib.parse import urlparse
 import scrapy
 from scrapy import Request
 
@@ -21,36 +22,40 @@ class LianJiaSpider(scrapy.Spider):
     def mainPage(self, response):
         title = response.xpath('//title/text()').extract()
         if "|成交查询" in title[0]:
-            areaList = response.selector.css('.position a::attr(href)').extract()
-            for url in areaList:
-                if "https://" in url:
-                    yield Request(url, callback=self.getList)
-                else:
-                    yield Request(response.url + url.split('/')[2], callback=self.getList)
+            res=self.recursiveListUrl(response)
+            for url in res:
+                yield Request(url, callback=self.getList)
+
             yield Request(response.url + "pg1/", callback=self.getList)
 
     def getList(self, response):
-        areaList = response.selector.css('.position a::attr(href)').extract()
-        for url in areaList:
-            if "https://" in url:
-                yield Request(url, callback=self.getList)
-            else:
-                yield Request(self.buildUlr(response.url.split('/')) + url.split('/')[2], callback=self.getList)
+        res = self.recursiveListUrl(response)
+        for url in res:
+            yield Request(url, callback=self.getList)
         infourl = response.selector.css('.listContent .title  a::attr(href)').extract()
         for url in infourl:
             yield Request(url, callback=self.detail)
 
-        strpageinfo = response.selector.css('.page-box .house-lst-page-box ::attr(page-data)').extract()[0]
-        pageinfo = json.loads(strpageinfo)
-        if pageinfo['curPage'] < pageinfo['totalPage']:
-            detailUrl = self.buildUlr(response.url.split('/')) + "pg" + str(pageinfo['curPage'] + 1)
-            yield Request(detailUrl, callback=self.getList)
+        try:
+            strpageinfo = response.selector.css('.page-box .house-lst-page-box ::attr(page-data)').extract()[0]
+            pageinfo = json.loads(strpageinfo)
+            cur = pageinfo['curPage']
+            total = pageinfo['totalPage']
 
-    def buildUlr(self, args):
-        ret = ''
-        for item in args[0:4]:
-            ret += item + "/"
-        return ret
+            ourl=response.url
+            result = urlparse(ourl)
+            if "pg" not in result.path:
+                ourl+="pg1/"
+                result = urlparse(ourl)
+
+            if cur == 1:
+                while cur < total:
+                    cur += 1
+                    res = re.sub(r'pg\d+', "pg" + str(cur), result.path)
+                    res = result.scheme + "://" + result.netloc + res
+                    yield Request(res, callback=self.getList)
+        except:
+            pass
 
     def detail(self, response):
         # 成交时间
@@ -125,8 +130,23 @@ class LianJiaSpider(scrapy.Spider):
             if 'Duplicate' in repr(e):
                 session.close()
             else:
-                print(e)
                 session.close()
 
         # 关闭session:
         session.close()
+
+    def writelog(self, url):
+        with open("log.txt", 'a') as f:
+            f.write(url + "\n")
+
+    def recursiveListUrl(self, response):
+        host = urlparse(response.url)
+        host = host.scheme + "://" + host.netloc
+        areaList = response.selector.css('.position a::attr(href)').extract()
+        ret = []
+        for url in areaList:
+            if "https://" in url:
+                ret.append(url)
+            else:
+                ret.append(host + url)
+        return ret
