@@ -29,7 +29,7 @@ CREATE TABLE `lianjia_transaction` (
  `zqtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '抓取时间',
  `price` double NOT NULL COMMENT '成交价格',
  `avgPrice` double NOT NULL COMMENT '每平米价格',
- `ljID` double NOT NULL COMMENT '链家ID',
+ `ljID` varchar(25) NOT NULL COMMENT '链家ID',
  `address` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '地址',
  `address1` varchar(15) COLLATE utf8_bin DEFAULT NULL,
  `address2` varchar(15) COLLATE utf8_bin DEFAULT NULL,
