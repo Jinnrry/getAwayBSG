@@ -43,5 +43,5 @@ CREATE TABLE `lianjia_transaction` (
  `address10` varchar(15) COLLATE utf8_bin DEFAULT NULL,
  `url` varchar(500) COLLATE utf8_bin DEFAULT NULL,
  PRIMARY KEY (`id`),
- UNIQUE KEY `ljID` (`ljID`),
+ UNIQUE KEY `ljID` (`ljID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
