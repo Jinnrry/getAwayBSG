@@ -6,6 +6,7 @@ from scrapy import Request
 
 from config.DBInfo import SessionFactory
 from db.transaction import lianjia_transaction
+from tools import tools
 
 
 class LianJiaSpider(scrapy.Spider):
@@ -15,6 +16,8 @@ class LianJiaSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
+        tools.writeLog("lianjia", "start")
+
         hreflist = response.selector.css(".city_list_ul a::attr(href)").extract()
         for url in hreflist:
             yield Request(url + "chengjiao", callback=self.mainPage)

@@ -4,10 +4,14 @@ from db.item import Item
 from spider import api
 from config import cityList
 from config import keys
+from tools import tools
 citylist = cityList.getCityList()
 
 kw = keys.getKeys()
 length = 50
+
+
+tools.writeLog("zlzp","start")
 
 
 def avgSalary(info):
