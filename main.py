@@ -57,10 +57,10 @@ def saveData(item):
 
 allnum = 0
 for city in citylist:
-    print(city['name'])
+   # print(city['name'])
     for k in kw:
-        print(k)
-        print("已抓取" + str(allnum))
+    #    print(k)
+    #    print("已抓取" + str(allnum))
         start = 0
         total = 0
         res = api.getList(city['code'], k, start, length)
