@@ -1,3 +1,4 @@
 #!/bin/bash
-scrapy crawl lianjia
-/usr/bin/python3 main.py
+cd /home/jiangwei1995910/getAwayBSG/
+/usr/local/bin/scrapy crawl lianjia --nolog 
+
