@@ -1,0 +1,5 @@
+# m h  dom mon dow   command
+50 3 * * 2 /home/jiangwei1995910/lianjia-beike-spider/run.sh
+0 18 * * *  /home/jiangwei1995910/getAwayBSG/run.sh
+0  0  *  * * /usr/bin/python3 /home/jiangwei1995910/getAwayBSG/main.py
+*  *  11  * * /usr/bin/python3 /home/jiangwei1995910/getAwayBSG/backup.py
