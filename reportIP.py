@@ -56,7 +56,7 @@ def getIP():
 def buildBody():
     ip = getIP()
     status = getStatus()
-    return "服务器网络信息：" + ip + "<br>服务器数据信息：<br>智联数据量：" + status['zhilian'] + "链家数据量：" + status['lianjia']
+    return "服务器网络信息：" + ip + "<br>服务器数据信息：<br>智联数据量：" + str(status['zhilian']) + "链家数据量：" + str(status['lianjia'])
 
 
 sendEmail("定时脚本：汇报状态", buildBody(), "ok@xjiangwei.cn")
