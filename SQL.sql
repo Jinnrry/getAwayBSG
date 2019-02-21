@@ -45,3 +45,19 @@ CREATE TABLE `lianjia_transaction` (
  PRIMARY KEY (`id`),
  UNIQUE KEY `ljID` (`ljID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+
+CREATE TABLE `ziroom` (
+  `id` int(11) NOT NULL,
+  `price` int(10) DEFAULT NULL,
+  `url` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `iswhole` tinyint(1) DEFAULT NULL,
+  `ctime` datetime DEFAULT CURRENT_TIMESTAMP,
+  `area` double DEFAULT NULL,
+  `bedroom` varchar(2) COLLATE utf8_bin DEFAULT NULL,
+  `parlor` varchar(2) COLLATE utf8_bin DEFAULT NULL,
+  `district_name` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+  `bizcircle_name` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
