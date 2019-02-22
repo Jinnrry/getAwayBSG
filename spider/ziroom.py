@@ -1,22 +1,19 @@
 from config.DBInfo import SessionFactory
 from db.ziroom import Ziroom
 from spider import api
-
-import requests
+from tools import tools
 from PIL import Image
 from pyquery import PyQuery as pq
 import json
 from urllib.request import urlretrieve
 from tools import path
-
 from pytesseract import pytesseract
 
-header = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36'
-}
 
-response = requests.get("http://www.ziroom.com/z/nl/z3.html", headers=header)
-content = pq(response.text)
+# 已经抓取过的URL
+all = set()
+# 即将抓取的URL
+already = set()
 
 
 def getEntrance(content):
@@ -25,37 +22,47 @@ def getEntrance(content):
     for a in lista:
         url = a.attr('href')
         url = url.replace('//', 'http://', 1)
-        print(url)
+        if url not in all:
+            all.add(url)
+            already.add(url)
 
 
-def getHouse(content):
+# 获取一页数据
+def getOnePage(url):
+    print(url)
     while True:
-        html = content.html()
+        response = api.get(url)
+        page = pq(response.text)
+
+        # 提取区域URL
+        getEntrance(page)
+        html = page.html()
         start = html.find("ROOM_PRICE") + 12
         end = html.find("\n", start) - 1
         res = json.loads(html[start:end])
         numImage = 'http:' + res['image']
         filename = path.tempPath + 'numcode.png'
         urlretrieve(numImage, filename)
-        text = pytesseract.image_to_string(Image.open(filename), config='-psm 7')
+        text = pytesseract.image_to_string(Image.open(filename),config='--psm 7 digits')
         text = text.replace(" ", "")
+        text = text.replace("/", "")
         if len(text) != 10:
-            print("图片识别失败")
+            tools.writeLog("图片识别失败", "图片识别失败","ziroom.log")
             continue
         offsets = res['offset']
-        content = content('#houseList li').items()
+        content = page('#houseList li').items()
         for index, house in enumerate(content):
             houseUrl = house('.txt a.t1').attr('href')
             offset = offsets[index]
             price = ''
             for i in offset:
                 price += text[i:i + 1]
-            # print(price)
-            print(houseUrl)
             index_start = houseUrl.find("vr/")
             index_end = houseUrl.find(".html")
             houseid = houseUrl[index_start + 3:index_end]
             houseinfo = getHouseInfo(houseid, "110000")
+            if houseinfo['error_code'] != 0:
+                continue
             area = houseinfo['data']['area']
             iswhole = houseinfo['data']['is_whole']
             bedroom = houseinfo['data']['bedroom']
@@ -74,23 +81,26 @@ def getHouse(content):
                 'area': area
             })
         break
+    nextPage = page("#page .next").attr("href")
+    if nextPage != None:
+        nextPage = 'http:' + nextPage
+        getOnePage(nextPage)
 
 
 def getHouseInfo(id, cityid):
     url = "http://m.ziroom.com/wap/detail/room.json?city_code=" + cityid + "&id=" + id
     res = api.get(url)
-    res = json.loads(res.text)
+    try:
+        res = json.loads(res.text)
+    except:
+        return {'error_code': 500}
     return res
 
 
 def saveData(item):
-    # 创建session对象:
     session = SessionFactory()
-    # 创建新User对象:
     new_data = Ziroom(item)
-    # 添加到session:
     session.add(new_data)
-    # 提交即保存到数据库:
     try:
         session.commit()
     except Exception as e:
@@ -103,13 +113,20 @@ def saveData(item):
             session.close()
             return False
 
-    # 关闭session:
     session.close()
     return True
 
 
-# http://m.ziroom.com/wap/detail/room.json?city_code=110000&id=61954203
+def start():
+    tools.writeLog("启动","自如爬虫")
+    getOnePage('http://www.ziroom.com/z/nl/z3.html')
+    while True:
+        try:
+            url = already.pop()
+            getOnePage(url)
+        except:
+            break
 
-getHouse(content)
 
-# 2436851907
+start()
+
