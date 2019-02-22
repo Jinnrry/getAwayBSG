@@ -54,7 +54,7 @@ CREATE TABLE `ziroom` (
   `url` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `iswhole` tinyint(1) DEFAULT NULL,
   `ctime` datetime DEFAULT CURRENT_TIMESTAMP,
-  `area` double DEFAULT NULL,
+  `area` varchar(10) DEFAULT NULL,
   `bedroom` varchar(2) COLLATE utf8_bin DEFAULT NULL,
   `parlor` varchar(2) COLLATE utf8_bin DEFAULT NULL,
   `district_name` varchar(15) COLLATE utf8_bin DEFAULT NULL,
