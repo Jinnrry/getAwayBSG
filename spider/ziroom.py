@@ -46,6 +46,7 @@ def getOnePage(url):
         text = pytesseract.image_to_string(Image.open(filename), config='--psm 7 digits')
         text = text.replace(" ", "")
         text = text.replace("/", "")
+        text = text.replace("°", "7")
         if len(text) != 10:
             tools.writeLog("图片识别失败", "图片识别失败", "ziroom.log")
             continue
