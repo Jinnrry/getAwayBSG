@@ -1,4 +1,4 @@
-#coding:utf-8
+# coding:utf-8
 from tools import path
 from config.DBInfo import SessionFactory
 from db.ziroom import Ziroom
@@ -9,7 +9,6 @@ from pyquery import PyQuery as pq
 import json
 from urllib.request import urlretrieve
 from pytesseract import pytesseract
-
 
 # 已经抓取过的URL
 all = set()
@@ -44,11 +43,11 @@ def getOnePage(url):
         numImage = 'http:' + res['image']
         filename = path.tempPath + 'numcode.png'
         urlretrieve(numImage, filename)
-        text = pytesseract.image_to_string(Image.open(filename),config='--psm 7 digits')
+        text = pytesseract.image_to_string(Image.open(filename), config='--psm 7 digits')
         text = text.replace(" ", "")
         text = text.replace("/", "")
         if len(text) != 10:
-            tools.writeLog("图片识别失败", "图片识别失败","ziroom.log")
+            tools.writeLog("图片识别失败", "图片识别失败", "ziroom.log")
             continue
         offsets = res['offset']
         content = page('#houseList li').items()
@@ -64,6 +63,8 @@ def getOnePage(url):
             houseinfo = getHouseInfo(houseid, "110000")
             if houseinfo['error_code'] != 0:
                 continue
+            if houseinfo['data']['price_unit'] == "/天":
+                price = int(price) * 30
             area = houseinfo['data']['area']
             iswhole = houseinfo['data']['is_whole']
             bedroom = houseinfo['data']['bedroom']
@@ -119,7 +120,7 @@ def saveData(item):
 
 
 def start():
-    tools.writeLog("启动","自如爬虫")
+    tools.writeLog("启动", "自如爬虫")
     getOnePage('http://www.ziroom.com/z/nl/z3.html')
     while True:
         try:
@@ -130,4 +131,3 @@ def start():
 
 
 start()
-
