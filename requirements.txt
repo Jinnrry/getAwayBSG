@@ -2,3 +2,4 @@ requests
 SQLAlchemy
 scrapy
 pymysql
+pyquery

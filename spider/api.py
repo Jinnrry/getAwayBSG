@@ -6,16 +6,19 @@ import requests
 
 
 def get(url):
-    sleep(random.randint(0,5))
+    header = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36'
+    }
+    # sleep(random.randint(0,5))
     try:
-        return requests.get(url,timeout=10)
+        return requests.get(url, timeout=10, headers=header)
     except:
-        return requests.get(url, timeout=10)
+        return requests.get(url, timeout=10, headers=header)
 
 
 # 智联招聘取列表的接口
 def getList(cityid, kw, start, length):
-    kw=quote(kw, 'utf-8')
+    kw = quote(kw, 'utf-8')
 
     url = 'https://fe-api.zhaopin.com/c/i/sou?start=' + str(start) + 'pageSize=' + str(length) + '&cityId=' + str(
         cityid) + '&workExperience=-1&education=-1&companyType=-1&employmentType=-1&jobWelfareTag=-1&sortType=publish&kw=' + str(
@@ -23,4 +26,4 @@ def getList(cityid, kw, start, length):
     try:
         return json.loads(get(url).text)
     except:
-        return {'code':0}
+        return {'code': 0}
