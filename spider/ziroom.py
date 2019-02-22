@@ -1,3 +1,5 @@
+#coding:utf-8
+from tools import path
 from config.DBInfo import SessionFactory
 from db.ziroom import Ziroom
 from spider import api
@@ -6,7 +8,6 @@ from PIL import Image
 from pyquery import PyQuery as pq
 import json
 from urllib.request import urlretrieve
-from tools import path
 from pytesseract import pytesseract
 
 
