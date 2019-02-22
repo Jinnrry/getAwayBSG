@@ -43,10 +43,11 @@ def getOnePage(url):
         numImage = 'http:' + res['image']
         filename = path.tempPath + 'numcode.png'
         urlretrieve(numImage, filename)
-        text = pytesseract.image_to_string(Image.open(filename), config='--psm 7')
+        text = pytesseract.image_to_string(Image.open(filename),config='--psm 7 digit')
         text = text.replace(" ", "")
+        text = text.replace("/", "")
         if len(text) != 10:
-            tools.writeLog("图片识别失败", "图片识别失败")
+            tools.writeLog("图片识别失败", "图片识别失败","ziroom.log")
             continue
         offsets = res['offset']
         content = page('#houseList li').items()
@@ -56,8 +57,6 @@ def getOnePage(url):
             price = ''
             for i in offset:
                 price += text[i:i + 1]
-            # print(price)
-            # print(houseUrl)
             index_start = houseUrl.find("vr/")
             index_end = houseUrl.find(".html")
             houseid = houseUrl[index_start + 3:index_end]
@@ -119,6 +118,7 @@ def saveData(item):
 
 
 def start():
+    tools.writeLog("启动","自如爬虫")
     getOnePage('http://www.ziroom.com/z/nl/z3.html')
     while True:
         try:
