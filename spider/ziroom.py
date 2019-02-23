@@ -11,7 +11,7 @@ from urllib.request import urlretrieve
 from pytesseract import pytesseract
 
 # 已经抓取过的URL
-all = set()
+all = set('http://www.ziroom.com/z/nl/z3.html')
 # 即将抓取的URL
 already = set()
 
