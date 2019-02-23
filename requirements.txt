@@ -5,4 +5,3 @@ pyquery==1.4.0
 pytesseract==0.2.6
 Pillow==5.4.1
 scrapy==1.6.0
-pathlib
