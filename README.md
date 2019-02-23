@@ -112,4 +112,4 @@ pip3 install -r requirements.txt
 
 1.请求都设置上UA
 
-2.价格数据由于都是一样的字体，永远不会变，只是顺序随机，我使用了tesseract然后自己训练了字库，识别率基本上达到100%准确度
+2.价格数据由于都是一样的字体，永远不会变，只是顺序随机，我使用了tesseract然后自己训练了字库，识别率基本上达到100%准确度。训练好的字库文件是fontyp.traineddata，放到tesseract的tessdata目录中即可使用（tesseract版本必须是4.0，字库对其他版本不兼容）
