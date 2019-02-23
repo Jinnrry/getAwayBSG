@@ -43,7 +43,7 @@ def getOnePage(url):
         numImage = 'http:' + res['image']
         filename = path.tempPath + 'numcode.png'
         urlretrieve(numImage, filename)
-        text = pytesseract.image_to_string(Image.open(filename), config='--psm 7 digits')
+        text = pytesseract.image_to_string(Image.open(filename),lang="fontyp", config='--psm 7 digits')
         text = text.replace(" ", "")
         text = text.replace("/", "")
         text = text.replace("°", "7")
