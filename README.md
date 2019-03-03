@@ -99,7 +99,11 @@ pip3 install -r requirements.txt
 
 在你的mysql中运行SQL.sql文件创建数据表
 
-然后进入config文件夹里面，配置你自己的数据库信息，最后修改crontab文件的路径，将其设置成你的crontab配置
+然后进入config文件夹里面，配置你自己的数据库信息，
+
+安装tesseract4.0，将字库文件fontyp.traineddata放到tesseract的tessdata目录中
+
+最后修改crontab文件的路径，将其设置成你的crontab配置
 
 
 
