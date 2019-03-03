@@ -32,13 +32,13 @@ def sendEmail(title, content, user):
 
 res=getHouseInfo('61411849',"110000")
 
-if res['data']['status'] == 'tzpzz':
+if res['data']['status'] != 'tzpzz':
     if not os.path.exists('lock'):
         fp = open("lock",'w')
         fp.close()
         print("send!")
-        # sendEmail("自如房屋释放通知","自如房屋释放通知！房屋链接：http://www.ziroom.com/z/vr/61411849.html","ok@xjiangwei.cn")
-        # sendEmail("自如房屋释放通知","自如房屋释放通知！房屋链接：http://www.ziroom.com/z/vr/61411849.html","jiangwei@mafengwo.com")
-        # sendEmail("自如房屋释放通知","自如房屋释放通知！房屋链接：http://www.ziroom.com/z/vr/61411849.html","604836556@qq.com")
+        sendEmail("自如房屋释放通知","自如房屋释放通知！房屋链接：http://www.ziroom.com/z/vr/61411849.html","ok@xjiangwei.cn")
+        sendEmail("自如房屋释放通知","自如房屋释放通知！房屋链接：http://www.ziroom.com/z/vr/61411849.html","jiangwei@mafengwo.com")
+        sendEmail("自如房屋释放通知","自如房屋释放通知！房屋链接：http://www.ziroom.com/z/vr/61411849.html","604836556@qq.com")
     else:
         exit()
