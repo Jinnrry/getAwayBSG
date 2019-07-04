@@ -39,18 +39,18 @@ func main() {
 				err = json.Unmarshal([]byte(res), &mapResult)
 				if err != nil {
 					fmt.Println("JsonToMapDemo err: ", err)
-				}
-				if mapResult["data"] != nil {
-					data := mapResult["data"].(map[string]interface{})
-					fmt.Println(data["numTotal"])
-					numTotal := data["numTotal"]
-					total = int(numTotal.(float64))
-					results := data["results"].([]interface{})
-					db.AddZLItem(results)
 				} else {
-					fmt.Println("接口返回错误！")
+					if mapResult["data"] != nil {
+						data := mapResult["data"].(map[string]interface{})
+						fmt.Println(data["numTotal"])
+						numTotal := data["numTotal"]
+						total = int(numTotal.(float64))
+						results := data["results"].([]interface{})
+						db.AddZLItem(results)
+					} else {
+						fmt.Println("接口返回错误！")
+					}
 				}
-
 			}
 		}
 	}
@@ -59,6 +59,8 @@ func main() {
 }
 
 func get(link string) (bodystr string) {
+	bodystr = ""
+
 	client := &http.Client{}
 	reqest, _ := http.NewRequest("GET", link, nil)
 
@@ -71,9 +73,11 @@ func get(link string) (bodystr string) {
 	reqest.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
 
 	response, _ := client.Do(reqest)
-	if response.StatusCode == 200 {
-		body, _ := ioutil.ReadAll(response.Body)
-		bodystr = string(body)
+	if response != nil {
+		if response.StatusCode == 200 {
+			body, _ := ioutil.ReadAll(response.Body)
+			bodystr = string(body)
+		}
 	}
 
 	return bodystr
