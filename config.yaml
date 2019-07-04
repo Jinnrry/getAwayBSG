@@ -1238,10 +1238,6 @@ zlCityList:
     url: https://www.zhaopin.com/maoming/
     code: 771
     pinyin: maoming
-  - name: 蒙自市
-    url: https://www.zhaopin.com/mengzishi/
-    code:
-    pinyin: mengzishi
   - name: 满洲里
     url: https://www.zhaopin.com/manzhouli/
     code: 10157
