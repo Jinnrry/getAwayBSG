@@ -10,7 +10,7 @@ dbDatabase: pachong
 dbCollection: lianjia
 
 # 存智联的数据
-# 自己添加Link 字段的唯一键，不然有重复
+# 自己添加positionURL 字段的唯一键，不然有重复
 zlDBCollection: zhilian
 
 zlKeyWords:
