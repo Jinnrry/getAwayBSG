@@ -19,8 +19,11 @@ func init() {
 		dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 		err := config.LoadFile(dir + "/config.yaml")
 		if err != nil {
-			fmt.Println("加载配置文件错误！！请确认当前目录下包含config.yaml文件")
-			fmt.Println(err)
+			err = config.LoadFile("./config.yaml")
+			if err != nil {
+				fmt.Println("加载配置文件错误！！请确认当前目录下包含config.yaml文件")
+				fmt.Println(err)
+			}
 		}
 		conf := config.Map()
 		instance.configInfo = conf
@@ -36,8 +39,11 @@ func GetInstance() *singleton {
 		dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 		err := config.LoadFile(dir + "/config.yaml")
 		if err != nil {
-			fmt.Println("加载配置文件错误！！请确认当前目录下包含config.yaml文件")
-			fmt.Println(err)
+			err = config.LoadFile("./config.yaml")
+			if err != nil {
+				fmt.Println("加载配置文件错误！！请确认当前目录下包含config.yaml文件")
+				fmt.Println(err)
+			}
 		}
 		conf := config.Map()
 		instance.configInfo = conf

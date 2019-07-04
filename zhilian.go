@@ -40,12 +40,17 @@ func main() {
 				if err != nil {
 					fmt.Println("JsonToMapDemo err: ", err)
 				}
-				data := mapResult["data"].(map[string]interface{})
-				fmt.Println(data["numTotal"])
-				numTotal := data["numTotal"]
-				total = int(numTotal.(float64))
-				results := data["results"].([]interface{})
-				db.AddZLItem(results)
+				if mapResult["data"] != nil {
+					data := mapResult["data"].(map[string]interface{})
+					fmt.Println(data["numTotal"])
+					numTotal := data["numTotal"]
+					total = int(numTotal.(float64))
+					results := data["results"].([]interface{})
+					db.AddZLItem(results)
+				} else {
+					fmt.Println("接口返回错误！")
+				}
+
 			}
 		}
 	}
