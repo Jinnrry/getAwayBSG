@@ -8,6 +8,7 @@ import (
 	"getAwayBSG/db"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
+	cachemongo "github.com/zolamk/colly-mongo-storage/colly/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -26,6 +27,15 @@ func crawlerOneCity(cityUrl string) {
 	c := colly.NewCollector()
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
+	configInfo := configs.Config()
+	storage := &cachemongo.Storage{
+		Database: "colly",
+		URI:      configInfo["dburl"].(string),
+	}
+
+	if err := c.SetStorage(storage); err != nil {
+		panic(err)
+	}
 
 	c.OnHTML("#position a", func(element *colly.HTMLElement) {
 		u, err := url.Parse(cityUrl)
@@ -59,12 +69,22 @@ func crawlerOneCity(cityUrl string) {
 		price := e.ChildText(".totalPrice")
 		price = strings.Replace(price, "万", "0000", 1)
 		//fmt.Println("总价：" + price)
+		iPrice, err := strconv.Atoi(price)
+		if err != nil {
+			iPrice = 0
+		}
 
 		unitPrice := e.ChildAttr(".unitPrice", "data-price")
 
 		//fmt.Println("每平米：" + unitPrice)
 		//fmt.Println(e.Text)
-		db.Add(bson.M{"Title": title, "TotalePrice": price, "UnitPrice": unitPrice, "Link": link, "listCrawlTime": time.Now()})
+
+		iUnitPrice, err := strconv.Atoi(unitPrice)
+		if err != nil {
+			iUnitPrice = 0
+		}
+
+		db.Add(bson.M{"Title": title, "TotalePrice": iPrice, "UnitPrice": iUnitPrice, "Link": link, "listCrawlTime": time.Now()})
 
 	})
 
@@ -101,8 +121,22 @@ func crawlDetail() (sucnum int) {
 	c := colly.NewCollector()
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
+	configInfo := configs.Config()
+	storage := &cachemongo.Storage{
+		Database: "colly",
+		URI:      configInfo["dburl"].(string),
+	}
+	if err := c.SetStorage(storage); err != nil {
+		panic(err)
+	}
 	c.OnHTML(".area .mainInfo", func(element *colly.HTMLElement) {
-		db.Update(element.Request.URL.String(), bson.M{"area": strings.Replace(element.Text, "平米", "", 1), "detailCrawlTime": time.Now()})
+		area := strings.Replace(element.Text, "平米", "", 1)
+		iArea, err := strconv.Atoi(area)
+		if err != nil {
+			iArea = 0
+		}
+
+		db.Update(element.Request.URL.String(), bson.M{"area": iArea, "detailCrawlTime": time.Now()})
 
 	})
 
@@ -119,7 +153,15 @@ func crawlDetail() (sucnum int) {
 
 	c.OnHTML(".transaction li", func(element *colly.HTMLElement) {
 		if element.ChildText("span:first-child") == "挂牌时间" {
-			db.Update(element.Request.URL.String(), bson.M{"guapaitime": element.ChildText("span:last-child"), "detailCrawlTime": time.Now()})
+
+			sGTime := element.ChildText("span:last-child")
+			ttime, err := time.Parse("2006-01-02", sGTime)
+
+			if err != nil {
+				ttime = time.Now()
+			}
+
+			db.Update(element.Request.URL.String(), bson.M{"guapaitime": ttime, "detailCrawlTime": time.Now()})
 		}
 	})
 
@@ -127,7 +169,6 @@ func crawlDetail() (sucnum int) {
 		fmt.Println("详情抓取：", r.URL.String())
 	})
 
-	configInfo := configs.Config()
 	client, _ := mongo.NewClient(options.Client().ApplyURI(configInfo["dburl"].(string)))
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	err := client.Connect(ctx)

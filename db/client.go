@@ -22,7 +22,7 @@ func GetInstance() *singleton {
 		instance = new(singleton)
 		configInfo := configs.Config()
 		client, _ := mongo.NewClient(options.Client().ApplyURI(configInfo["dburl"].(string)))
-		ctx, _ := context.WithTimeout(context.Background(), 3600*time.Second)
+		ctx, _ := context.WithTimeout(context.Background(), 24*365*time.Hour)
 		instance.client = client
 		instance.ctx = ctx
 		err := client.Connect(ctx)
