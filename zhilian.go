@@ -15,8 +15,11 @@ func main() {
 	configInfo := configs.Config()
 	keys := configInfo["zlKeyWords"].([]interface{})
 	cityList := configInfo["zlCityList"].([]interface{})
-	for i := 0; i < len(keys); i++ {
-		for j := 0; j < len(cityList); j++ {
+
+	cityIndex, kwIndex := db.GetZhilianStatus()
+
+	for i := kwIndex; i < len(keys); i++ {
+		for j := cityIndex; j < len(cityList); j++ {
 			var total int = 1000
 			for start := 0; start < total; start += 50 {
 				cityid := cityList[j].(map[string]interface{})["code"]
@@ -47,6 +50,7 @@ func main() {
 					}
 				}
 			}
+			db.SetZhilianStatus(j, i)
 		}
 	}
 	//fmt.Println(keys[i])

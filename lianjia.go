@@ -111,8 +111,9 @@ func listCrawler() {
 	confInfo := configs.Config()
 	fmt.Print(confInfo)
 	cityList := confInfo["cityList"].([]interface{})
-	for i := 0; i < len(cityList); i++ {
+	for i := db.GetLianjiaStatus(); i < len(cityList); i++ {
 		crawlerOneCity(cityList[i].(string))
+		db.SetLianjiaStatus(i)
 	}
 }
 
@@ -170,7 +171,7 @@ func crawlDetail() (sucnum int) {
 	})
 
 	client, _ := mongo.NewClient(options.Client().ApplyURI(configInfo["dburl"].(string)))
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 24*365*time.Hour)
 	err := client.Connect(ctx)
 	if err != nil {
 		fmt.Print("数据库连接失败！")
