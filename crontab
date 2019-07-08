@@ -1,0 +1,11 @@
+# m h  dom mon dow   command
+# 启动链家爬虫
+0 16 * * *  /home/jiangwei1995910/getAwayBSG/run.sh
+# 启动智联爬虫
+0  0  *  * * /usr/bin/python3 /home/jiangwei1995910/getAwayBSG/main.py
+# 每个月11号备份视图数据
+*  *  11  * * /usr/bin/python3 /home/jiangwei1995910/getAwayBSG/backup.py
+# 每天早上8点和中午13点汇报服务器状态
+0 8,13 * * * /usr/bin/python3 /home/jiangwei1995910/getAwayBSG/reportIP.py
+# 自如爬虫
+0 8 * * * /usr/bin/python3 /home/jiangwei1995910/getAwayBSG/start.py
