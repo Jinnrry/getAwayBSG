@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"getAwayBSG/configs"
@@ -10,8 +9,6 @@ import (
 	"github.com/gocolly/colly/extensions"
 	cachemongo "github.com/zolamk/colly-mongo-storage/colly/mongo"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/url"
 	"strconv"
 	"strings"
@@ -30,7 +27,7 @@ func crawlerOneCity(cityUrl string) {
 	configInfo := configs.Config()
 	storage := &cachemongo.Storage{
 		Database: "colly",
-		URI:      configInfo["dburl"].(string),
+		URI:      configInfo["dburl"].(string) + "/colly",
 	}
 
 	if err := c.SetStorage(storage); err != nil {
@@ -125,7 +122,7 @@ func crawlDetail() (sucnum int) {
 	configInfo := configs.Config()
 	storage := &cachemongo.Storage{
 		Database: "colly",
-		URI:      configInfo["dburl"].(string),
+		URI:      configInfo["dburl"].(string) + "/colly",
 	}
 	if err := c.SetStorage(storage); err != nil {
 		panic(err)
@@ -170,29 +167,29 @@ func crawlDetail() (sucnum int) {
 		fmt.Println("详情抓取：", r.URL.String())
 	})
 
-	client, _ := mongo.NewClient(options.Client().ApplyURI(configInfo["dburl"].(string)))
-	ctx, _ := context.WithTimeout(context.Background(), 24*365*time.Hour)
-	err := client.Connect(ctx)
+	client := db.GetClient()
+	ctx := db.GetCtx()
+
+	odb := client.Database(configInfo["dbDatabase"].(string))
+	lianjia := odb.Collection(configInfo["dbCollection"].(string))
+
+	cur, err := lianjia.Find(ctx, bson.M{"detailCrawlTime": bson.M{"$exists": false}})
+
 	if err != nil {
-		fmt.Print("数据库连接失败！")
 		fmt.Println(err)
-	}
-	db := client.Database(configInfo["dbDatabase"].(string))
-	lianjia := db.Collection(configInfo["dbCollection"].(string))
+	} else {
+		defer cur.Close(ctx)
+		for cur.Next(ctx) {
+			var item bson.M
+			if err := cur.Decode(&item); err != nil {
+				fmt.Print("数据库读取失败！")
+				fmt.Println(err)
+			} else {
+				sucnum++
+				c.Visit(item["Link"].(string))
+			}
 
-	cur, _ := lianjia.Find(ctx, bson.M{"detailCrawlTime": bson.M{"$exists": false}})
-	defer cur.Close(ctx)
-
-	for cur.Next(ctx) {
-		var item bson.M
-		if err := cur.Decode(&item); err != nil {
-			fmt.Print("数据库读取失败！")
-			fmt.Println(err)
-		} else {
-			sucnum++
-			c.Visit(item["Link"].(string))
 		}
-
 	}
 
 	return sucnum

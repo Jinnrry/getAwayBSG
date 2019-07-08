@@ -4,6 +4,10 @@ dburl: mongodb://localhost:27017
 # MongoDB 数据库名
 dbDatabase: pachong
 
+# 抓取状态记录，这个库不可改名，如果启用了权限管理需要添加这个库的权限
+collyDatabase: colly
+
+
 # MongoDB 集合名
 # 存链家的数据
 # 自己添加Link 字段的唯一键，不然有重复

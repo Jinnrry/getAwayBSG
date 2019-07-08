@@ -22,7 +22,7 @@ func GetInstance() *singleton {
 	if instance == nil {
 		instance = new(singleton)
 		configInfo := configs.Config()
-		client, _ := mongo.NewClient(options.Client().ApplyURI(configInfo["dburl"].(string)))
+		client, _ := mongo.NewClient(options.Client().ApplyURI(configInfo["dburl"].(string) + "/" + configInfo["dbDatabase"].(string)))
 		ctx, _ := context.WithTimeout(context.Background(), 24*365*time.Hour)
 		instance.client = client
 		instance.ctx = ctx
@@ -45,8 +45,8 @@ func GetInstance() *singleton {
 func GetLianjiaStatus() int {
 	client := GetInstance().client
 	ctx := GetInstance().ctx
-
-	db := client.Database("colly")
+	configInfo := configs.Config()
+	db := client.Database(configInfo["dbDatabase"].(string))
 	lianjia_status := db.Collection("lianjia_status")
 	var res bson.M
 	err := lianjia_status.FindOne(ctx, bson.M{}).Decode(&res)
@@ -61,7 +61,8 @@ func GetLianjiaStatus() int {
 func SetLianjiaStatus(i int) {
 	client := GetInstance().client
 	ctx := GetInstance().ctx
-	db := client.Database("colly")
+	configInfo := configs.Config()
+	db := client.Database(configInfo["dbDatabase"].(string))
 	lianjia_status := db.Collection("lianjia_status")
 	lianjia_status.DeleteMany(ctx, bson.M{})
 	lianjia_status.InsertOne(ctx, bson.M{"index": i})
@@ -70,7 +71,8 @@ func SetLianjiaStatus(i int) {
 func GetZhilianStatus() (int, int) {
 	client := GetInstance().client
 	ctx := GetInstance().ctx
-	db := client.Database("colly")
+	configInfo := configs.Config()
+	db := client.Database(configInfo["dbDatabase"].(string))
 	lianjia_status := db.Collection("zhilian_status")
 	var res bson.M
 
@@ -94,8 +96,17 @@ func GetZhilianStatus() (int, int) {
 func SetZhilianStatus(cityIndex int, kwIndex int) {
 	client := GetInstance().client
 	ctx := GetInstance().ctx
-	db := client.Database("colly")
+	configInfo := configs.Config()
+	db := client.Database(configInfo["dbDatabase"].(string))
 	lianjia_status := db.Collection("zhilian_status")
 	lianjia_status.DeleteMany(ctx, bson.M{})
 	lianjia_status.InsertOne(ctx, bson.M{"city_index": cityIndex, "kw_index": kwIndex})
+}
+
+func GetCtx() context.Context {
+	return GetInstance().ctx
+}
+
+func GetClient() *mongo.Client {
+	return GetInstance().client
 }
