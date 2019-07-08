@@ -1,5 +1,7 @@
 # 逃离北上广
 
+[这里是python实现](https://github.com/jiangwei1995910/getAwayBSG/tree/python)
+
 > 本项目仅供学习研究，禁止用于任何商业项目
 
 
