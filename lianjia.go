@@ -48,70 +48,70 @@ func crawlerOneCity(cityUrl string) {
 	if err := c.SetStorage(storage); err != nil {
 		panic(err)
 	}
-
-	c.OnHTML(".position a", func(element *colly.HTMLElement) {
-		u, err := url.Parse(cityUrl)
-		if err != nil {
-			panic(err)
-		}
-		rootUrl := u.Scheme + "://" + u.Host
-
-		goUrl := element.Attr("href")
-		u, err = url.Parse(goUrl)
-		if err != nil {
-			fmt.Println(err)
-		}
-		if u.Scheme == "" {
-			goUrl = rootUrl + u.Path
-		} else {
-			goUrl = u.String()
-		}
-		c.Visit(goUrl)
-
-	})
-
-	// 获取一页的数据
-	c.OnHTML(".LOGCLICKDATA", func(e *colly.HTMLElement) {
-		link := e.ChildAttr("a", "href")
-
-		title := e.ChildText("a:first-child")
-		//fmt.Println(title)
-
-		price := e.ChildText(".totalPrice")
-		price = strings.Replace(price, "万", "0000", 1)
-		//fmt.Println("总价：" + price)
-		iPrice, err := strconv.Atoi(price)
-		if err != nil {
-			iPrice = 0
-		}
-
-		unitPrice := e.ChildAttr(".unitPrice", "data-price")
-
-		//fmt.Println("每平米：" + unitPrice)
-		//fmt.Println(e.Text)
-
-		iUnitPrice, err := strconv.Atoi(unitPrice)
-		if err != nil {
-			iUnitPrice = 0
-		}
-
-		db.Add(bson.M{"Title": title, "TotalePrice": iPrice, "UnitPrice": iUnitPrice, "Link": link, "listCrawlTime": time.Now()})
-
-	})
-
-	c.OnHTML(".page-box", func(e *colly.HTMLElement) {
-		page := Page{}
-		json.Unmarshal([]byte(e.ChildAttr(".house-lst-page-box", "page-data")), &page)
-		//fmt.Println(page.TotalPage)
-		//fmt.Println(page.CurPage)
-		if page.CurPage < page.TotalPage {
-			c.Visit(cityUrl + "pg" + strconv.Itoa(page.CurPage+1) + "/")
-		}
-
-	})
-
 	c.OnRequest(func(r *colly.Request) {
 		fmt.Println("列表抓取：", r.URL.String())
+	})
+
+	c.OnHTML("body", func(element *colly.HTMLElement) {
+		// 获取一页的数据
+		element.ForEach(".LOGCLICKDATA", func(i int, e *colly.HTMLElement) {
+			link := e.ChildAttr("a", "href")
+
+			title := e.ChildText("a:first-child")
+			//fmt.Println(title)
+
+			price := e.ChildText(".totalPrice")
+			price = strings.Replace(price, "万", "0000", 1)
+			//fmt.Println("总价：" + price)
+			iPrice, err := strconv.Atoi(price)
+			if err != nil {
+				iPrice = 0
+			}
+
+			unitPrice := e.ChildAttr(".unitPrice", "data-price")
+
+			//fmt.Println("每平米：" + unitPrice)
+			//fmt.Println(e.Text)
+
+			iUnitPrice, err := strconv.Atoi(unitPrice)
+			if err != nil {
+				iUnitPrice = 0
+			}
+			db.Add(bson.M{"Title": title, "TotalePrice": iPrice, "UnitPrice": iUnitPrice, "Link": link, "listCrawlTime": time.Now()})
+
+		})
+
+		// 切换地点
+		element.ForEach(".position a", func(i int, element *colly.HTMLElement) {
+			u, err := url.Parse(cityUrl)
+			if err != nil {
+				panic(err)
+			}
+			rootUrl := u.Scheme + "://" + u.Host
+
+			goUrl := element.Attr("href")
+			u, err = url.Parse(goUrl)
+			if err != nil {
+				fmt.Println(err)
+			}
+			if u.Scheme == "" {
+				goUrl = rootUrl + u.Path
+			} else {
+				goUrl = u.String()
+			}
+			c.Visit(goUrl)
+		})
+
+		// 下一页
+		element.ForEach(".page-box", func(i int, element *colly.HTMLElement) {
+			var page Page
+			json.Unmarshal([]byte(element.ChildAttr(".house-lst-page-box", "page-data")), &page)
+			if page.CurPage < page.TotalPage {
+				c.Visit(cityUrl + "pg" + strconv.Itoa(page.CurPage+1) + "/")
+			}
+
+		})
+
 	})
 
 	c.Visit(cityUrl)
