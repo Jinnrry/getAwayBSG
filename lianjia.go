@@ -7,6 +7,7 @@ import (
 	"getAwayBSG/db"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
+	"github.com/gocolly/colly/proxy"
 	cachemongo "github.com/zolamk/colly-mongo-storage/colly/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"net/url"
@@ -22,9 +23,23 @@ type Page struct {
 
 func crawlerOneCity(cityUrl string) {
 	c := colly.NewCollector()
+	configInfo := configs.Config()
+	if configInfo["proxyList"] != nil && len(configInfo["proxyList"].([]interface{})) > 0 {
+		var proxyList []string
+		for _, v := range configInfo["proxyList"].([]interface{}) {
+			proxyList = append(proxyList, v.(string))
+		}
+
+		if configInfo["proxyList"] != nil {
+			rp, err := proxy.RoundRobinProxySwitcher(proxyList...)
+			if err != nil {
+				fmt.Println(err)
+			}
+			c.SetProxyFunc(rp)
+		}
+	}
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
-	configInfo := configs.Config()
 	storage := &cachemongo.Storage{
 		Database: "colly",
 		URI:      configInfo["dburl"].(string) + "/colly",
@@ -34,7 +49,7 @@ func crawlerOneCity(cityUrl string) {
 		panic(err)
 	}
 
-	c.OnHTML("#position a", func(element *colly.HTMLElement) {
+	c.OnHTML(".position a", func(element *colly.HTMLElement) {
 		u, err := url.Parse(cityUrl)
 		if err != nil {
 			panic(err)
@@ -51,7 +66,6 @@ func crawlerOneCity(cityUrl string) {
 		} else {
 			goUrl = u.String()
 		}
-
 		c.Visit(goUrl)
 
 	})
@@ -117,9 +131,25 @@ func listCrawler() {
 func crawlDetail() (sucnum int) {
 	sucnum = 0
 	c := colly.NewCollector()
+	configInfo := configs.Config()
+
+	if configInfo["proxyList"] != nil && len(configInfo["proxyList"].([]interface{})) > 0 {
+		var proxyList []string
+		for _, v := range configInfo["proxyList"].([]interface{}) {
+			proxyList = append(proxyList, v.(string))
+		}
+
+		if configInfo["proxyList"] != nil {
+			rp, err := proxy.RoundRobinProxySwitcher(proxyList...)
+			if err != nil {
+				fmt.Println(err)
+			}
+			c.SetProxyFunc(rp)
+		}
+	}
+
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
-	configInfo := configs.Config()
 	storage := &cachemongo.Storage{
 		Database: "colly",
 		URI:      configInfo["dburl"].(string) + "/colly",

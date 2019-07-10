@@ -17,6 +17,13 @@ dbCollection: lianjia
 # 自己添加positionURL 字段的唯一键，不然有重复
 zlDBCollection: zhilian
 
+# 代理列表
+# 注释掉则不使用代理(不使用代理偶尔被封，偶尔没事，抓慢点好像就没问题，我树莓派上面没问题，电脑上可能是太快了，会被封)
+#proxyList:
+#  - socks5://127.0.0.1:1080
+#  - http://127.0.0.1:8118
+
+
 
 # 智联招聘平台爬取关键词
 zlKeyWords:
@@ -37,8 +44,8 @@ zlKeyWords:
 # ！！！请尽量为被爬方考虑，不要抓全站，配置你需要抓取的城市即可！
 # 需要抓取房价城市
 cityList:
-   - https://cd.lianjia.com/ershoufang/               #成都
-   - https://bj.lianjia.com/ershoufang/               #北京
+  - https://cd.lianjia.com/ershoufang/               #成都
+#  - https://bj.lianjia.com/ershoufang/               #北京
 #  - https://aq.lianjia.com/ershoufang/               #安庆
 #  - https://cz.fang.lianjia.com/ershoufang/               #滁州
 #  - https://hf.lianjia.com/ershoufang/               #合肥
@@ -2297,6 +2304,5 @@ zlCityList:
 #    url: https://www.zhaopin.com/zunhua/
 #    code: 10143
 #    pinyin: zunhua
-
 
 

@@ -1,14 +1,17 @@
 package main
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"getAwayBSG/configs"
 	"getAwayBSG/db"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 func main() {
@@ -59,8 +62,31 @@ func main() {
 
 func get(link string) (bodystr string) {
 	bodystr = ""
+	var client *http.Client
+	configInfo := configs.Config()
+	if configInfo["proxyList"] != nil {
+		var proxyList []string
+		for _, v := range configInfo["proxyList"].([]interface{}) {
+			proxyList = append(proxyList, v.(string))
+		}
+		rand.Seed(time.Now().Unix())
 
-	client := &http.Client{}
+		proxy, _ := url.Parse(proxyList[rand.Intn(len(proxyList))])
+		tr := &http.Transport{
+			Proxy:           http.ProxyURL(proxy),
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+
+		client = &http.Client{
+			Transport: tr,
+			Timeout:   time.Second * 10, //超时时间
+		}
+	} else {
+		client = &http.Client{
+			Timeout: time.Second * 10, //超时时间
+		}
+	}
+
 	reqest, _ := http.NewRequest("GET", link, nil)
 
 	reqest.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")

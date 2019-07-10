@@ -1,5 +1,5 @@
 #MongoDB 连接URL
-dburl: mongodb://localhost:27017
+dburl: mongodb://127.0.0.1:27017
 
 # MongoDB 数据库名
 dbDatabase: pachong
@@ -16,6 +16,17 @@ dbCollection: lianjia
 # 存智联的数据
 # 自己添加positionURL 字段的唯一键，不然有重复
 zlDBCollection: zhilian
+
+
+
+# 代理列表
+# 注释掉则不使用代理(不使用代理偶尔被封，偶尔没事，抓慢点好像就没问题，我树莓派上面没问题，电脑上可能是太快了，会被封)
+#proxyList:
+#  - socks5://127.0.0.1:1080
+#  - http://127.0.0.1:8118
+
+
+
 
 zlKeyWords:
   - php
@@ -2289,6 +2300,5 @@ zlCityList:
     url: https://www.zhaopin.com/zunhua/
     code: 10143
     pinyin: zunhua
-
 
 
