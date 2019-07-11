@@ -11,6 +11,7 @@ import (
 	cachemongo "github.com/zolamk/colly-mongo-storage/colly/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -44,7 +45,6 @@ func crawlerOneCity(cityUrl string) {
 		Database: "colly",
 		URI:      configInfo["dburl"].(string) + "/colly",
 	}
-
 	if err := c.SetStorage(storage); err != nil {
 		panic(err)
 	}
@@ -88,7 +88,6 @@ func crawlerOneCity(cityUrl string) {
 				panic(err)
 			}
 			rootUrl := u.Scheme + "://" + u.Host
-
 			goUrl := element.Attr("href")
 			u, err = url.Parse(goUrl)
 			if err != nil {
@@ -99,17 +98,24 @@ func crawlerOneCity(cityUrl string) {
 			} else {
 				goUrl = u.String()
 			}
+			re, _ := regexp.Compile("pg\\d+/*")
+			goUrl = re.ReplaceAllString(goUrl, "")
 			c.Visit(goUrl)
 		})
 
 		// 下一页
 		element.ForEach(".page-box", func(i int, element *colly.HTMLElement) {
 			var page Page
-			json.Unmarshal([]byte(element.ChildAttr(".house-lst-page-box", "page-data")), &page)
-			if page.CurPage < page.TotalPage {
-				c.Visit(cityUrl + "pg" + strconv.Itoa(page.CurPage+1) + "/")
+			err := json.Unmarshal([]byte(element.ChildAttr(".house-lst-page-box", "page-data")), &page)
+			if err == nil {
+				if page.CurPage < page.TotalPage {
+					var gourl string
+					re, _ := regexp.Compile("pg\\d+/*")
+					gourl = re.ReplaceAllString(element.Request.URL.String(), "")
+					gourl = gourl + "pg" + strconv.Itoa(page.CurPage+1)
+					c.Visit(gourl)
+				}
 			}
-
 		})
 
 	})
@@ -120,7 +126,6 @@ func crawlerOneCity(cityUrl string) {
 
 func listCrawler() {
 	confInfo := configs.Config()
-	fmt.Print(confInfo)
 	cityList := confInfo["cityList"].([]interface{})
 	for i := db.GetLianjiaStatus(); i < len(cityList); i++ {
 		crawlerOneCity(cityList[i].(string))
