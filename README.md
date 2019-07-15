@@ -97,32 +97,5 @@
 
 2.有空再加一些其他网站的数据进来
 
-
-
-## More !
-
-这份分析仅供参考。
-
-如果你想自己分析，你可以如下操作
-```
-git clone https://github.com/jiangwei1995910/getAwayBSG
-
-pip3 install -r requirements.txt
-
-```
-
-在你的mysql中运行SQL.sql文件创建数据表
-
-然后进入config文件夹里面，配置你自己的数据库信息，
-
-安装tesseract4.0，将字库文件fontyp.traineddata放到tesseract的tessdata目录中
-
-最后修改crontab文件的路径，将其设置成你的crontab配置
-
-
-
-
-## 实现
-
-智联招聘跟链家这2个网站绝对是我这辈子见过对爬虫最友好的网站！要脱库真的太简单了。尤其是智联，直接调AJAX接口就行了，简直比有些公司合作接口还好用。链家的话，直接上colly，半个小时搞定。
+3.加入租房数据，计算各个城市的租售比
 
