@@ -35,10 +35,8 @@ func main() {
 		fmt.Println("Done!")
 	} else if choice == 2 {
 		db.SetZhilianStatus(0, 0)
-		clean_visit()
 		fmt.Println("Done!")
 	} else {
-		clean_visit()
 		fmt.Println("选择错误！")
 	}
 

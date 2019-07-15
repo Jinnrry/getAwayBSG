@@ -1,6 +1,6 @@
 # 逃离北上广
 
-[这里是python实现](https://github.com/jiangwei1995910/getAwayBSG/tree/python)
+[这里是python-scrapy-mysql实现](https://github.com/jiangwei1995910/getAwayBSG/tree/python)
 
 > 本项目仅供学习研究，禁止用于任何商业项目
 
@@ -124,14 +124,5 @@ pip3 install -r requirements.txt
 
 ## 实现
 
-智联招聘跟链家这2个网站绝对是我这辈子见过对爬虫最友好的网站！要脱库真的太简单了。尤其是智联，直接调AJAX接口就行了，简直比有些公司合作接口还好用。链家的话，直接上scrapy，半个小时搞定。
+智联招聘跟链家这2个网站绝对是我这辈子见过对爬虫最友好的网站！要脱库真的太简单了。尤其是智联，直接调AJAX接口就行了，简直比有些公司合作接口还好用。链家的话，直接上colly，半个小时搞定。
 
-### 自如
-
-自如加了一定的反爬措施，不过也很简单。首先请求必须带上UA数据，其次自如的价格数据全部使用图片展示，返回一个0到9的数字图片，前端使用span便签设置backgroup加偏移量显示。
-
-#### 破解
-
-1.请求都设置上UA
-
-2.价格数据由于都是一样的字体，永远不会变，只是顺序随机，我使用了tesseract然后自己训练了字库，识别率基本上达到100%准确度。训练好的字库文件是fontyp.traineddata，放到tesseract的tessdata目录中即可使用（tesseract版本必须是4.0，字库对其他版本不兼容）

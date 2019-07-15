@@ -8,7 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"time"
 )
 
 type singleton struct {
@@ -23,7 +22,7 @@ func GetInstance() *singleton {
 		instance = new(singleton)
 		configInfo := configs.Config()
 		client, _ := mongo.NewClient(options.Client().ApplyURI(configInfo["dburl"].(string) + "/" + configInfo["dbDatabase"].(string)))
-		ctx, _ := context.WithTimeout(context.Background(), 24*365*time.Hour)
+		ctx := context.Background()
 		instance.client = client
 		instance.ctx = ctx
 		err := client.Connect(ctx)
