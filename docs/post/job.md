@@ -6,4 +6,3 @@ layout: default
 
 
 
-[back](./)
