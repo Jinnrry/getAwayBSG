@@ -1,6 +1,9 @@
 # 逃离北上广
 
-[这里是python-scrapy-mysql实现](https://github.com/jiangwei1995910/getAwayBSG/tree/python)
+
+[![Home](https://img.shields.io/badge/link-项目主页-brightgreen.svg)](https://jiangwei1995910.github.io/getAwayBSG/)
+[![Link](https://img.shields.io/badge/link-python实现-blue.svg)](https://github.com/jiangwei1995910/getAwayBSG/tree/python)
+
 
 > **注意！**\
 > 1.本项目仅供学习研究，禁止用于任何商业项目\
