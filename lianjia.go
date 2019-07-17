@@ -25,6 +25,17 @@ type Page struct {
 func crawlerOneCity(cityUrl string) {
 	c := colly.NewCollector()
 	configInfo := configs.Config()
+
+	if configInfo["crawlDelay"] != nil {
+		delay, _ := configInfo["crawlDelay"].(json.Number).Int64()
+		if delay > 0 {
+			c.Limit(&colly.LimitRule{
+				DomainGlob: "*",
+				Delay:      time.Duration(delay) * time.Second,
+			})
+		}
+	}
+
 	if configInfo["proxyList"] != nil && len(configInfo["proxyList"].([]interface{})) > 0 {
 		var proxyList []string
 		for _, v := range configInfo["proxyList"].([]interface{}) {
@@ -52,13 +63,17 @@ func crawlerOneCity(cityUrl string) {
 		fmt.Println("列表抓取：", r.URL.String())
 	})
 
+	c.OnHTML("title", func(element *colly.HTMLElement) {
+		fmt.Println(element.Text)
+	})
+
 	c.OnHTML("body", func(element *colly.HTMLElement) {
 		// 获取一页的数据
 		element.ForEach(".LOGCLICKDATA", func(i int, e *colly.HTMLElement) {
 			link := e.ChildAttr("a", "href")
 
 			title := e.ChildText("a:first-child")
-			//fmt.Println(title)
+			fmt.Println(title)
 
 			price := e.ChildText(".totalPrice")
 			price = strings.Replace(price, "万", "0000", 1)
@@ -138,6 +153,16 @@ func crawlDetail() (sucnum int) {
 	c := colly.NewCollector()
 	configInfo := configs.Config()
 
+	if configInfo["crawlDelay"] != nil {
+		delay, _ := configInfo["crawlDelay"].(json.Number).Int64()
+		if delay > 0 {
+			c.Limit(&colly.LimitRule{
+				DomainGlob: "*",
+				Delay:      time.Duration(delay) * time.Second,
+			})
+		}
+	}
+
 	if configInfo["proxyList"] != nil && len(configInfo["proxyList"].([]interface{})) > 0 {
 		var proxyList []string
 		for _, v := range configInfo["proxyList"].([]interface{}) {
@@ -171,6 +196,10 @@ func crawlDetail() (sucnum int) {
 
 		db.Update(element.Request.URL.String(), bson.M{"area": iArea, "detailCrawlTime": time.Now()})
 
+	})
+
+	c.OnHTML("title", func(element *colly.HTMLElement) {
+		fmt.Println(element.Text)
 	})
 
 	c.OnHTML(".aroundInfo .communityName .info", func(element *colly.HTMLElement) {

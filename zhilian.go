@@ -61,9 +61,18 @@ func main() {
 }
 
 func get(link string) (bodystr string) {
+
 	bodystr = ""
 	var client *http.Client
 	configInfo := configs.Config()
+
+	if configInfo["crawlDelay"] != nil {
+		delay, _ := configInfo["crawlDelay"].(json.Number).Int64()
+		if delay > 0 {
+			time.Sleep(time.Duration(delay) * time.Second)
+		}
+	}
+
 	if configInfo["proxyList"] != nil {
 		var proxyList []string
 		for _, v := range configInfo["proxyList"].([]interface{}) {

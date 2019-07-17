@@ -8,6 +8,9 @@ dbDatabase: pachong
 collyDatabase: colly
 
 
+# 抓取间隔时间 单位秒
+crawlDelay: 3
+
 # MongoDB 集合名
 # 存链家的数据
 # 自己添加Link 字段的唯一键，不然有重复
