@@ -106,7 +106,6 @@ func AddZLItem(items []interface{}) {
 	_, err := lianjia.InsertMany(ctx, items)
 	if err != nil {
 		if !strings.Contains(err.Error(), "multiple write errors") {
-			fmt.Print("数据库插入失败！")
 			fmt.Println(err)
 		}
 	}

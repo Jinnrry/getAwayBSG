@@ -7,6 +7,8 @@ dbDatabase: pachong
 # 抓取状态记录，这个库不可改名，如果启用了权限管理需要添加这个库的权限
 collyDatabase: colly
 
+# 租房存储数据集合
+zufangCollection: lianjia_zufang
 
 # 抓取间隔时间 单位秒
 crawlDelay: 3
@@ -20,8 +22,6 @@ dbCollection: lianjia
 # 自己添加positionURL 字段的唯一键，不然有重复
 zlDBCollection: zhilian
 
-
-
 # 代理列表
 # 注释掉则不使用代理(不使用代理偶尔被封，偶尔没事，抓慢点好像就没问题，我树莓派上面没问题，电脑上可能是太快了，会被封)
 #proxyList:
@@ -30,7 +30,7 @@ zlDBCollection: zhilian
 
 
 
-
+# 智联招聘平台爬取关键词
 zlKeyWords:
   - php
   - java
@@ -45,14 +45,17 @@ zlKeyWords:
   - 软件开发
   - 程序员
 
+
+# ！！！请尽量为被爬方考虑，不要抓全站，配置你需要抓取的城市即可！
 # 需要抓取房价城市
 cityList:
+  - https://cd.lianjia.com/ershoufang/               #成都
+  - https://bj.lianjia.com/ershoufang/               #北京
   - https://aq.lianjia.com/ershoufang/               #安庆
   - https://cz.fang.lianjia.com/ershoufang/               #滁州
   - https://hf.lianjia.com/ershoufang/               #合肥
   - https://mas.lianjia.com/ershoufang/               #马鞍山
   - https://wuhu.lianjia.com/ershoufang/               #芜湖
-  - https://bj.lianjia.com/ershoufang/               #北京
   - https://cq.lianjia.com/ershoufang/               #重庆
   - https://fz.lianjia.com/ershoufang/               #福州
   - https://ly.fang.lianjia.com/ershoufang/               #龙岩
@@ -138,7 +141,6 @@ cityList:
   - https://hhht.lianjia.com/ershoufang/               #呼和浩特
   - https://yinchuan.lianjia.com/ershoufang/               #银川
   - https://sh.lianjia.com/ershoufang/               #上海
-  - https://cd.lianjia.com/ershoufang/               #成都
   - https://dy.fang.lianjia.com/ershoufang/               #德阳
   - https://dazhou.lianjia.com/ershoufang/               #达州
   - https://leshan.fang.lianjia.com/ershoufang/               #乐山
@@ -174,8 +176,270 @@ cityList:
 
 
 
+# 需要抓取租房数据的城市
+zufangCityList:
+  - link: https://cd.lianjia.com/zufang/
+    name: 成都
+  - link: https://bj.lianjia.com/zufang/
+    name: 北京
+  - link: https://aq.lianjia.com/zufang/
+    name: 安庆
+  - link: https://cz.fang.lianjia.com/zufang/
+    name: 滁州
+  - link: https://hf.lianjia.com/zufang/
+    name: 合肥
+  - link: https://mas.lianjia.com/zufang/
+    name: 马鞍山
+  - link: https://wuhu.lianjia.com/zufang/
+    name: 芜湖
+  - link: https://cq.lianjia.com/zufang/
+    name: 重庆
+  - link: https://fz.lianjia.com/zufang/
+    name: 福州
+  - link: https://ly.fang.lianjia.com/zufang/
+    name: 龙岩
+  - link: https://quanzhou.lianjia.com/zufang/
+    name: 泉州
+  - link: https://xm.lianjia.com/zufang/
+    name: 厦门
+  - link: https://zhangzhou.lianjia.com/zufang/
+    name: 漳州
+  - link: https://dg.lianjia.com/zufang/
+    name: 东莞
+  - link: https://fs.lianjia.com/zufang/
+    name: 佛山
+  - link: https://gz.lianjia.com/zufang/
+    name: 广州
+  - link: https://hui.lianjia.com/zufang/
+    name: 惠州
+  - link: https://jiangmen.lianjia.com/zufang/
+    name: 江门
+  - link: https://qy.lianjia.com/zufang/
+    name: 清远
+  - link: https://sz.lianjia.com/zufang/
+    name: 深圳
+  - link: https://zh.lianjia.com/zufang/
+    name: 珠海
+  - link: https://zhanjiang.lianjia.com/zufang/
+    name: 湛江
+  - link: https://zs.lianjia.com/zufang/
+    name: 中山
+  - link: https://gy.lianjia.com/zufang/
+    name: 贵阳
+  - link: https://bh.lianjia.com/zufang/
+    name: 北海
+  - link: https://gl.lianjia.com/zufang/
+    name: 桂林
+  - link: https://liuzhou.lianjia.com/zufang/
+    name: 柳州
+  - link: https://nn.lianjia.com/zufang/
+    name: 南宁
+  - link: https://lz.lianjia.com/zufang/
+    name: 兰州
+  - link: https://huangshi.lianjia.com/zufang/
+    name: 黄石
+  - link: https://hg.fang.lianjia.com/zufang/
+    name: 黄冈
+  - link: https://wh.lianjia.com/zufang/
+    name: 武汉
+  - link: https://xy.lianjia.com/zufang/
+    name: 襄阳
+  - link: https://xn.fang.lianjia.com/zufang/
+    name: 咸宁
+  - link: https://yichang.lianjia.com/zufang/
+    name: 宜昌
+  - link: https://cs.lianjia.com/zufang/
+    name: 长沙
+  - link: https://changde.lianjia.com/zufang/
+    name: 常德
+  - link: https://yy.lianjia.com/zufang/
+    name: 岳阳
+  - link: https://zhuzhou.lianjia.com/zufang/
+    name: 株洲
+  - link: https://bd.lianjia.com/zufang/
+    name: 保定
+  - link: https://chengde.fang.lianjia.com/zufang/
+    name: 承德
+  - link: https://hd.fang.lianjia.com/zufang/
+    name: 邯郸
+  - link: https://hs.fang.lianjia.com/zufang/
+    name: 衡水
+  - link: https://lf.lianjia.com/zufang/
+    name: 廊坊
+  - link: https://qhd.fang.lianjia.com/zufang/
+    name: 秦皇岛
+  - link: https://sjz.lianjia.com/zufang/
+    name: 石家庄
+  - link: https://ts.lianjia.com/zufang/
+    name: 唐山
+  - link: https://xt.fang.lianjia.com/zufang/
+    name: 邢台
+  - link: https://zjk.lianjia.com/zufang/
+    name: 张家口
+  - link: https://bt.fang.lianjia.com/zufang/
+    name: 保亭
+  - link: https://cm.fang.lianjia.com/zufang/
+    name: 澄迈
+  - link: https://dz.fang.lianjia.com/zufang/
+    name: 儋州
+  - link: https://da.fang.lianjia.com/zufang/
+    name: 定安
+  - link: https://hk.lianjia.com/zufang/
+    name: 海口
+  - link: https://lg.fang.lianjia.com/zufang/
+    name: 临高
+  - link: https://ld.fang.lianjia.com/zufang/
+    name: 乐东
+  - link: https://ls.fang.lianjia.com/zufang/
+    name: 陵水
+  - link: https://qh.fang.lianjia.com/zufang/
+    name: 琼海
+  - link: https://qz.fang.lianjia.com/zufang/
+    name: 琼中
+  - link: https://san.lianjia.com/zufang/
+    name: 三亚
+  - link: https://wzs.fang.lianjia.com/zufang/
+    name: 五指山
+  - link: https://wc.fang.lianjia.com/zufang/
+    name: 文昌
+  - link: https://wn.fang.lianjia.com/zufang/
+    name: 万宁
+  - link: https://kf.lianjia.com/zufang/
+    name: 开封
+  - link: https://luoyang.lianjia.com/zufang/
+    name: 洛阳
+  - link: https://xinxiang.lianjia.com/zufang/
+    name: 新乡
+  - link: https://xc.lianjia.com/zufang/
+    name: 许昌
+  - link: https://zz.lianjia.com/zufang/
+    name: 郑州
+  - link: https://hrb.lianjia.com/zufang/
+    name: 哈尔滨
+  - link: https://changzhou.lianjia.com/zufang/
+    name: 常州
+  - link: https://ha.lianjia.com/zufang/
+    name: 淮安
+  - link: https://ks.lianjia.com/zufang/
+    name: 昆山
+  - link: https://nj.lianjia.com/zufang/
+    name: 南京
+  - link: https://nt.lianjia.com/zufang/
+    name: 南通
+  - link: https://su.lianjia.com/zufang/
+    name: 苏州
+  - link: https://wx.lianjia.com/zufang/
+    name: 无锡
+  - link: https://xz.lianjia.com/zufang/
+    name: 徐州
+  - link: https://yc.lianjia.com/zufang/
+    name: 盐城
+  - link: https://zj.lianjia.com/zufang/
+    name: 镇江
+  - link: https://cc.lianjia.com/zufang/
+    name: 长春
+  - link: https://jl.lianjia.com/zufang/
+    name: 吉林
+  - link: https://ganzhou.lianjia.com/zufang/
+    name: 赣州
+  - link: https://jiujiang.lianjia.com/zufang/
+    name: 九江
+  - link: https://jian.lianjia.com/zufang/
+    name: 吉安
+  - link: https://nc.lianjia.com/zufang/
+    name: 南昌
+  - link: https://sr.lianjia.com/zufang/
+    name: 上饶
+  - link: https://dl.lianjia.com/zufang/
+    name: 大连
+  - link: https://dd.lianjia.com/zufang/
+    name: 丹东
+  - link: https://sy.lianjia.com/zufang/
+    name: 沈阳
+  - link: https://hhht.lianjia.com/zufang/
+    name: 呼和浩特
+  - link: https://yinchuan.lianjia.com/zufang/
+    name: 银川
+  - link: https://sh.lianjia.com/zufang/
+    name: 上海
+  - link: https://dy.fang.lianjia.com/zufang/
+    name: 德阳
+  - link: https://dazhou.lianjia.com/zufang/
+    name: 达州
+  - link: https://leshan.fang.lianjia.com/zufang/
+    name: 乐山
+  - link: https://liangshan.lianjia.com/zufang/
+    name: 凉山
+  - link: https://mianyang.lianjia.com/zufang/
+    name: 绵阳
+  - link: https://ms.fang.lianjia.com/zufang/
+    name: 眉山
+  - link: https://nanchong.lianjia.com/zufang/
+    name: 南充
+  - link: https://jn.lianjia.com/zufang/
+    name: 济南
+  - link: https://linyi.lianjia.com/zufang/
+    name: 临沂
+  - link: https://qd.lianjia.com/zufang/
+    name: 青岛
+  - link: https://wf.lianjia.com/zufang/
+    name: 潍坊
+  - link: https://weihai.lianjia.com/zufang/
+    name: 威海
+  - link: https://yt.lianjia.com/zufang/
+    name: 烟台
+  - link: https://zb.lianjia.com/zufang/
+    name: 淄博
+  - link: https://baoji.lianjia.com/zufang/
+    name: 宝鸡
+  - link: https://hanzhong.lianjia.com/zufang/
+    name: 汉中
+  - link: https://xa.lianjia.com/zufang/
+    name: 西安
+  - link: https://xianyang.lianjia.com/zufang/
+    name: 咸阳
+  - link: https://jz.fang.lianjia.com/zufang/
+    name: 晋中
+  - link: https://ty.lianjia.com/zufang/
+    name: 太原
+  - link: https://tj.lianjia.com/zufang/
+    name: 天津
+  - link: https://dali.fang.lianjia.com//zufang/
+    name: 大理
+  - link: https://km.lianjia.com/zufang/
+    name: 昆明
+  - link: https://xsbn.fang.lianjia.com/zufang/
+    name: 西双版纳
+  - link: https://hz.lianjia.com/zufang/
+    name: 杭州
+  - link: https://huzhou.lianjia.com/zufang/
+    name: 湖州
+  - link: https://jx.lianjia.com/zufang/
+    name: 嘉兴
+  - link: https://jh.lianjia.com/zufang/
+    name: 金华
+  - link: https://nb.lianjia.com/zufang/
+    name: 宁波
+  - link: https://sx.lianjia.com/zufang/
+    name: 绍兴
+  - link: https://taizhou.lianjia.com/zufang/
+    name: 台州
+  - link: https://wz.lianjia.com/zufang/
+    name: 温州
+
+
+
+
+
+
+# ！！！请尽量为被爬方考虑，不要抓全站，配置你需要抓取的城市即可！
 # 需要抓取招聘信息的城市
 zlCityList:
+  - name: 北京
+    url: https://www.zhaopin.com/beijing/
+    code: 530
+    pinyin: beijing
+    priority: 1
   - name: 鞍山
     url: https://www.zhaopin.com/anshan/
     code: 601
@@ -260,11 +524,6 @@ zlCityList:
     url: https://sou.zhaopin.com/Jobs/searchresult.ashx?jl=482&sm=0&p=1&sf=0
     code: 482
     pinyin: aodaliya
-  - name: 北京
-    url: https://www.zhaopin.com/beijing/
-    code: 530
-    pinyin: beijing
-    priority: 1
   - name: 包头
     url: https://www.zhaopin.com/baotou/
     code: 588
@@ -1256,6 +1515,10 @@ zlCityList:
     url: https://www.zhaopin.com/maoming/
     code: 771
     pinyin: maoming
+  - name: 蒙自市
+    url: https://www.zhaopin.com/mengzishi/
+    code:
+    pinyin: mengzishi
   - name: 满洲里
     url: https://www.zhaopin.com/manzhouli/
     code: 10157
@@ -2303,5 +2566,3 @@ zlCityList:
     url: https://www.zhaopin.com/zunhua/
     code: 10143
     pinyin: zunhua
-
-

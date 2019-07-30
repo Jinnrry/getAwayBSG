@@ -1,4 +1,4 @@
-package main
+package entrance
 
 import (
 	"context"
@@ -13,18 +13,20 @@ import (
 	"time"
 )
 
-func main() {
-
+func Start_clean() {
 	var choice int
-	if len(os.Args) > 1 && strings.Index(os.Args[1], "lianjia") > -1 {
+	if strings.Index(strings.Join(os.Args, ""), "lianjia_ershou") > -1 {
 		choice = 1
-	} else if len(os.Args) > 1 && strings.Index(os.Args[1], "zhilian") > -1 {
+	} else if strings.Index(strings.Join(os.Args, ""), "zhilian") > -1 {
 		choice = 2
+	} else if strings.Index(strings.Join(os.Args, ""), "lianjia_zufang") > -1 {
+		choice = 3
 	} else {
 		fmt.Println("清除抓取状态（不清除状态的话爬虫会从上次停止位置继续抓取）")
 		fmt.Println("请选择需要清除哪个爬虫的的状态数据：（输入数字）")
-		fmt.Println("1.链家")
+		fmt.Println("1.链家二手房")
 		fmt.Println("2.智联")
+		fmt.Println("3.链家租房")
 		fmt.Scanln(&choice)
 
 	}
@@ -35,6 +37,10 @@ func main() {
 		fmt.Println("Done!")
 	} else if choice == 2 {
 		db.SetZhilianStatus(0, 0)
+		fmt.Println("Done!")
+	} else if choice == 3 {
+		db.SetLianjiaZuFangStatus(0)
+		clean_visit()
 		fmt.Println("Done!")
 	} else {
 		fmt.Println("选择错误！")

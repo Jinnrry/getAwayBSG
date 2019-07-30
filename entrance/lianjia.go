@@ -1,4 +1,4 @@
-package main
+package entrance
 
 import (
 	"encoding/json"
@@ -115,7 +115,8 @@ func crawlerOneCity(cityUrl string) {
 			}
 			re, _ := regexp.Compile("pg\\d+/*")
 			goUrl = re.ReplaceAllString(goUrl, "")
-			c.Visit(goUrl)
+			err = c.Visit(goUrl)
+			fmt.Println(err)
 		})
 
 		// 下一页
@@ -128,14 +129,16 @@ func crawlerOneCity(cityUrl string) {
 					re, _ := regexp.Compile("pg\\d+/*")
 					gourl = re.ReplaceAllString(element.Request.URL.String(), "")
 					gourl = gourl + "pg" + strconv.Itoa(page.CurPage+1)
-					c.Visit(gourl)
+					err = c.Visit(gourl)
+					fmt.Println(err)
 				}
 			}
 		})
 
 	})
 
-	c.Visit(cityUrl)
+	err := c.Visit(cityUrl)
+	fmt.Println(err)
 
 }
 
@@ -259,7 +262,7 @@ func crawlDetail() (sucnum int) {
 	return sucnum
 }
 
-func main() {
+func Start_lianjia_ershou() {
 	listFlag := make(chan int)
 	detailFlag := make(chan int)
 

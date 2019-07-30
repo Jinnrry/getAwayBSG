@@ -102,6 +102,32 @@ func SetZhilianStatus(cityIndex int, kwIndex int) {
 	lianjia_status.InsertOne(ctx, bson.M{"city_index": cityIndex, "kw_index": kwIndex})
 }
 
+func GetLianjiaZuFangStatus() int {
+	client := GetInstance().client
+	ctx := GetInstance().ctx
+	configInfo := configs.Config()
+	db := client.Database(configInfo["dbDatabase"].(string))
+	lianjia_status := db.Collection("lianjiazf_status")
+	var res bson.M
+	err := lianjia_status.FindOne(ctx, bson.M{}).Decode(&res)
+	if err != nil {
+		return 0
+	}
+
+	index := res["index"].(int32)
+	return int(index)
+}
+
+func SetLianjiaZuFangStatus(i int) {
+	client := GetInstance().client
+	ctx := GetInstance().ctx
+	configInfo := configs.Config()
+	db := client.Database(configInfo["dbDatabase"].(string))
+	lianjia_status := db.Collection("lianjiazf_status")
+	lianjia_status.DeleteMany(ctx, bson.M{})
+	lianjia_status.InsertOne(ctx, bson.M{"index": i})
+}
+
 func GetCtx() context.Context {
 	return GetInstance().ctx
 }

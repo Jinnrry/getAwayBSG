@@ -1,4 +1,4 @@
-package main
+package entrance
 
 import (
 	"crypto/tls"
@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func main() {
+func Start_zhilian() {
 	configInfo := configs.Config()
 	keys := configInfo["zlKeyWords"].([]interface{})
 	cityList := configInfo["zlCityList"].([]interface{})
