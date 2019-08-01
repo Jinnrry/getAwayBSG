@@ -7,7 +7,7 @@ import (
 	"getAwayBSG/entrance"
 )
 
-// 实际中应该用更好的变量名
+// 申明配置变量
 var (
 	help           bool
 	config         string
@@ -16,6 +16,7 @@ var (
 	zhilian        bool
 	clean          bool
 	info           bool
+	infoSaveTo     string
 )
 
 func init() {
@@ -26,15 +27,19 @@ func init() {
 	flag.BoolVar(&zhilian, "zhilian", false, "抓取智联招聘数据")
 	flag.BoolVar(&clean, "clean", false, "清理缓存")
 	flag.BoolVar(&info, "info", false, "保存抓取状态")
+	flag.StringVar(&infoSaveTo, "info_save_to", "./numlog.txt", "输入状态文件保存位置")
 }
 
 func main() {
 	flag.Parse()
+	//初始化配置信息，同时输出配置信息
 	if config != "" {
 		configs.SetConfig(config)
 	}
 	fmt.Println(configs.Config())
 
+
+	//进入不同入口
 	if help {
 		flag.Usage()
 	} else if lianjia_ershou {
@@ -46,7 +51,7 @@ func main() {
 	} else if clean {
 		entrance.Start_clean()
 	} else if info {
-		entrance.Start_info()
+		entrance.Start_info(infoSaveTo)
 	} else {
 		flag.Usage()
 	}

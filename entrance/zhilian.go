@@ -26,6 +26,9 @@ func Start_zhilian() {
 			var total int = 1000
 			for start := 0; start < total; start += 50 {
 				cityid := cityList[j].(map[string]interface{})["code"]
+				if cityid == nil {
+					fmt.Println(cityList[j])
+				}
 				icityid, err := cityid.(json.Number).Int64()
 				if err != nil {
 					icityid = 530

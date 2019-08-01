@@ -10,14 +10,14 @@ import (
 	"time"
 )
 
-func Start_info() {
+func Start_info(path string) {
 
-	fd, _ := os.OpenFile("./numLog.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	fd, _ := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	fd_time := time.Now().Format("2006-01-02 15:04:05")
 	fd_content := strings.Join([]string{
-		fd_time, ":\n",
-		getLianjiaErShouFangStatus(), "\n",
-		getLianJiaZuFangStatus(), "\n",
+		fd_time, ":",
+		getLianjiaErShouFangStatus(), " ",
+		getLianJiaZuFangStatus(), " ",
 		getZhiLianStatus(), "\n",
 	}, "")
 	buf := []byte(fd_content)

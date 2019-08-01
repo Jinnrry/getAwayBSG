@@ -63,12 +63,13 @@ func TcrawlerOneCityZuFang(cityUrl string, cityname string) {
 	})
 
 	c.OnHTML(".content__list--item", func(element *colly.HTMLElement) {
-
+		var err error
 		var link string
 		var title string
 		var address string
 		var area string
 		var price int
+		var mianji int
 		element.ForEach(".twoline a", func(i int, element *colly.HTMLElement) {
 			link = "https://" + element.Request.URL.Host + element.Attr("href")
 			title = strings.TrimSpace(element.Text)
@@ -82,6 +83,22 @@ func TcrawlerOneCityZuFang(cityUrl string, cityname string) {
 			}
 		})
 
+		desc := element.ChildText(".content__list--item--des")
+		desc = strings.ReplaceAll(desc, " ", "")
+		desc = strings.ReplaceAll(desc, "\n", "")
+		fmt.Println(desc)
+		re, _ := regexp.Compile("(\\d+)㎡/")
+		indexs := re.FindStringIndex(desc)
+		if len(indexs) == 2 {
+
+			mianji, err = strconv.Atoi(desc[indexs[0] : indexs[1]-4])
+			if err != nil {
+				mianji = 0
+			}
+		} else {
+			mianji = 0
+		}
+
 		element.ForEach(".content__list--item-price em", func(i int, element *colly.HTMLElement) {
 			var err error
 			price, err = strconv.Atoi(element.Text)
@@ -90,12 +107,12 @@ func TcrawlerOneCityZuFang(cityUrl string, cityname string) {
 			}
 		})
 
-		fmt.Println(price)
-		fmt.Println(link)
-		fmt.Println(title)
-		fmt.Println(address)
-		fmt.Println(area)
-		fmt.Println(cityname)
+		//fmt.Println(price)
+		//fmt.Println(link)
+		//fmt.Println(title)
+		//fmt.Println(address)
+		//fmt.Println(area)
+		//fmt.Println(cityname)
 		fmt.Println("--------------------")
 
 		client := db.GetClient()
@@ -103,13 +120,14 @@ func TcrawlerOneCityZuFang(cityUrl string, cityname string) {
 
 		db := client.Database(configInfo["dbDatabase"].(string))
 		lianjia := db.Collection(configInfo["zufangCollection"].(string))
-		_, err := lianjia.InsertOne(ctx, bson.M{
+		_, err = lianjia.InsertOne(ctx, bson.M{
 			"Link":       link,
 			"title":      title,
 			"address":    address,
 			"area":       area,
 			"price":      price,
 			"city":       cityname,
+			"mianji":     mianji,
 			"crawl_time": time.Now(),
 		})
 		if err != nil {

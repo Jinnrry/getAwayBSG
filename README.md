@@ -65,8 +65,10 @@ option支持：lianjia_ershou、zhilian、lianjia_zufang
 方便定时脚本记录抓取情况，使用info命令可以输出当前抓取数据量到文件
 
 ```
-getAwayBSG -info
+getAwayBSG -info -info_save_to=./numLog.txt
 ```
+
+使用-info_save_to参数指定文件保存位置，默认为当前目录的numLog.txt文件中
 
 3.help
 
@@ -75,3 +77,28 @@ getAwayBSG -info
 ```
 getAwayBSG -help
 ```
+
+
+## 数据分析
+
+分析用的MongoDB语句在[Query.js](./Query.js)文件中，使用MongoDB执行即可
+
+## 编译
+
+编译使用xgo，需要先安装docker
+
+```
+git clone https://github.com/jiangwei1995910/getAwayBSG
+
+docker pull karalabe/xgo-latest
+
+go get github.com/karalabe/xgo
+
+cd getAwayBSG
+
+sh ./build.sh
+```
+
+## 部署
+
+如果需要分布式或者多进程抓取，在不同机器或者多个进程中指定相同的MongoDB源即可，程序已经支持分布式多进程抓取了。已抓取的链接和状态会通过MongoDB共享

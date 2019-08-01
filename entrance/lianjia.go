@@ -156,6 +156,7 @@ func crawlDetail() (sucnum int) {
 	c := colly.NewCollector()
 	configInfo := configs.Config()
 
+	//设置延时
 	if configInfo["crawlDelay"] != nil {
 		delay, _ := configInfo["crawlDelay"].(json.Number).Int64()
 		if delay > 0 {
@@ -166,6 +167,7 @@ func crawlDetail() (sucnum int) {
 		}
 	}
 
+	//设置代理
 	if configInfo["proxyList"] != nil && len(configInfo["proxyList"].([]interface{})) > 0 {
 		var proxyList []string
 		for _, v := range configInfo["proxyList"].([]interface{}) {
@@ -181,8 +183,11 @@ func crawlDetail() (sucnum int) {
 		}
 	}
 
+	//随机UA
 	extensions.RandomUserAgent(c)
+	//自动referer
 	extensions.Referer(c)
+	//设置MongoDB存储状态信息
 	storage := &cachemongo.Storage{
 		Database: "colly",
 		URI:      configInfo["dburl"].(string) + "/colly",
@@ -240,6 +245,7 @@ func crawlDetail() (sucnum int) {
 	odb := client.Database(configInfo["dbDatabase"].(string))
 	lianjia := odb.Collection(configInfo["dbCollection"].(string))
 
+	//读取出全部需要抓取详情的数据
 	cur, err := lianjia.Find(ctx, bson.M{"detailCrawlTime": bson.M{"$exists": false}})
 
 	if err != nil {
@@ -263,12 +269,12 @@ func crawlDetail() (sucnum int) {
 }
 
 func Start_lianjia_ershou() {
-	listFlag := make(chan int)
-	detailFlag := make(chan int)
+	listFlag := make(chan int)   //记录列表抓取是否完成
+	detailFlag := make(chan int) //记录详情是否抓取完成
 
 	go func() {
 		listCrawler()
-		listFlag <- 1
+		listFlag <- 1 //列表抓取完成
 	}()
 
 	go func() {
@@ -276,15 +282,16 @@ func Start_lianjia_ershou() {
 		for i := 0; i < 1; i = 0 {
 			if crawlDetail() == 0 {
 				zeroNum++
-				if zeroNum > 3 {
+				if zeroNum > 3 { //尝试3次都没有详情需要抓取，结束详情抓取
 					break
 				}
-				time.Sleep(300 * time.Second)
+				time.Sleep(300 * time.Second) //没有详情需要抓取了，等待5分钟再尝试
 			}
 		}
-		detailFlag <- 1
+		detailFlag <- 1 //详情抓取完成
 	}()
 
+	//详情抓取与列表抓取都完成了，结束主线程
 	<-listFlag
 	<-detailFlag
 }
