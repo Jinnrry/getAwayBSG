@@ -150,7 +150,7 @@ func TcrawlerOneCityZuFang(cityUrl string, cityname string) {
 				goUrl := re.ReplaceAllString(element.Request.URL.String(), "")
 
 				err = c.Visit(goUrl + "pg" + strconv.Itoa(i) + "/")
-				if err.Error() != "URL already visited" {
+				if err != nil && err.Error() != "URL already visited" {
 					fmt.Println(err)
 				}
 
@@ -158,28 +158,36 @@ func TcrawlerOneCityZuFang(cityUrl string, cityname string) {
 		}
 	})
 
-	c.OnHTML(".filter a", func(element *colly.HTMLElement) {
-		//// 切换地点
-		u, err := url.Parse(cityUrl)
-		if err != nil {
-			panic(err)
-		}
-		rootUrl := u.Scheme + "://" + u.Host
-		goUrl := element.Attr("href")
-		u, err = url.Parse(goUrl)
-		if err != nil && err.Error() != "URL already visited" {
-			fmt.Println(err)
-		}
-		if u.Scheme == "" {
-			goUrl = rootUrl + u.Path
-		} else {
-			goUrl = u.String()
-		}
-		re, _ := regexp.Compile("pg\\d+/*")
-		goUrl = re.ReplaceAllString(goUrl, "")
-		err = c.Visit(goUrl)
-		if err != nil && err.Error() != "URL already visited" {
-			fmt.Println(err)
+	c.OnHTML(".filter ul", func(element *colly.HTMLElement) {
+
+		data_target := element.Attr("data-target")
+
+		if data_target == "area" {
+			element.ForEach("a", func(i int, element *colly.HTMLElement) {
+				//// 切换地点
+				u, err := url.Parse(cityUrl)
+				if err != nil {
+					panic(err)
+				}
+				rootUrl := u.Scheme + "://" + u.Host
+				goUrl := element.Attr("href")
+				u, err = url.Parse(goUrl)
+				if err != nil && err.Error() != "URL already visited" {
+					fmt.Println(err)
+				}
+				if u.Scheme == "" {
+					goUrl = rootUrl + u.Path
+				} else {
+					goUrl = u.String()
+				}
+				re, _ := regexp.Compile("pg\\d+/*")
+				goUrl = re.ReplaceAllString(goUrl, "")
+				err = c.Visit(goUrl)
+				if err != nil && err.Error() != "URL already visited" {
+					fmt.Println(err)
+				}
+
+			})
 		}
 
 	})

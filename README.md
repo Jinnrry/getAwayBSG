@@ -3,6 +3,13 @@
 
 [![Home](https://img.shields.io/badge/link-项目主页-brightgreen.svg)](https://jiangwei1995910.github.io/getAwayBSG/)
 [![Link](https://img.shields.io/badge/link-python实现-blue.svg)](https://github.com/jiangwei1995910/getAwayBSG/tree/python)
+[![Downloads](https://img.shields.io/github/downloads/jiangwei1995910/getAwayBSG/total)](https://img.shields.io/github/downloads/jiangwei1995910/getAwayBSG/total)
+[![forks](https://img.shields.io/github/forks/jiangwei1995910/getAwayBSG?style=flat)](https://img.shields.io/github/forks/jiangwei1995910/getAwayBSG?style=flat)
+[![starts](https://img.shields.io/github/stars/jiangwei1995910/getAwayBSG)](https://img.shields.io/github/stars/jiangwei1995910/getAwayBSG)
+[![license](https://img.shields.io/github/license/jiangwei1995910/getAwayBSG)](https://img.shields.io/github/license/jiangwei1995910/getAwayBSG)
+[![issues](https://img.shields.io/github/issues/jiangwei1995910/getAwayBSG)](https://img.shields.io/github/issues/jiangwei1995910/getAwayBSG)
+[![version](https://img.shields.io/github/release/jiangwei1995910/getAwayBSG)](https://img.shields.io/github/release/jiangwei1995910/getAwayBSG)
+
 
 
 > **注意！**\
