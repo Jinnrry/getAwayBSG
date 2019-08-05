@@ -1,7 +1,7 @@
 # 逃离北上广
 
 
-[![Home](https://img.shields.io/badge/link-项目主页-brightgreen.svg)](https://jiangwei1995910.github.io/getAwayBSG/)
+[![Home](https://img.shields.io/badge/link-项目主页-brightgreen.svg)](https://jinnrry.github.io/getAwayBSG/)
 [![Link](https://img.shields.io/badge/link-python实现-blue.svg)](https://github.com/jiangwei1995910/getAwayBSG/tree/python)
 [![Downloads](https://img.shields.io/github/downloads/jiangwei1995910/getAwayBSG/total)](https://img.shields.io/github/downloads/jiangwei1995910/getAwayBSG/total)
 [![forks](https://img.shields.io/github/forks/jiangwei1995910/getAwayBSG?style=flat)](https://img.shields.io/github/forks/jiangwei1995910/getAwayBSG?style=flat)
@@ -15,7 +15,7 @@
 > **注意！**\
 > 1.本项目仅供学习研究，禁止用于任何商业项目\
 > 2.运行的时候为被爬方考虑下！尽量不要爬全站。请在配置文件中设置你需要的城市爬取即可！\
-> 3.[项目主页](https://jiangwei1995910.github.io/getAwayBSG/)里面有现成数据，不需要你自己动手运行爬虫 
+> 3.[项目主页](https://jinnrry.github.io/getAwayBSG/)里面有现成数据，不需要你自己动手运行爬虫 
 
 
 ## 啥？
@@ -26,7 +26,7 @@
 
 ## 安装
 
-从[releases](https://github.com/jiangwei1995910/getAwayBSG/releases)下载对应操作系统，对应平台的二进制文件和配置文件模板
+从[releases](https://github.com/jinnrry/getAwayBSG/releases)下载对应操作系统，对应平台的二进制文件和配置文件模板
 
 ## 配置
 
@@ -95,7 +95,7 @@ getAwayBSG -help
 编译使用xgo，需要先安装docker
 
 ```
-git clone https://github.com/jiangwei1995910/getAwayBSG
+git clone https://github.com/jinnrry/getAwayBSG
 
 docker pull karalabe/xgo-latest
 
