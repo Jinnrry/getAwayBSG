@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width,maximum-scale=2">
     <link rel="stylesheet" type="text/css" media="screen" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
 
+    <link rel="stylesheet" type="text/css" href="../datatables.css"/>
+    <script type="text/javascript" src="../datatables.js"></script>
+	<style>
+	a{text-decoration:none}
+	</style>
 {% seo %}
   </head>
 
@@ -58,5 +63,11 @@
         ga('send', 'pageview');
       </script>
     {% endif %}
+
+      <script>
+        $(document).ready( function () {
+          $('table').DataTable();
+        } );
+      </script>
   </body>
 </html>
