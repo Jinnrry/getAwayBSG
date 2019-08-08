@@ -1,5 +1,5 @@
-title: 逃离北上广
-description: 如果你是一个正准备逃离北上广等一线城市却又找不到去处的IT人士，或许这个项目能给你点建议。
-show_downloads: false
+title: Slate theme
+description: Slate is a theme for GitHub Pages.
+show_downloads: true
 google_analytics:
 theme: jekyll-theme-slate
