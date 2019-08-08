@@ -11,8 +11,14 @@
     <script type="text/javascript" src="/getAwayBSG/datatables.js"></script>
 	<style>
 	  a{text-decoration:none}
-      .links{
-        color:#fafafa;
+      .links ul{
+        padding: 0;
+      }
+      .links li{
+        display: inline-block;
+        list-style-type: none;
+        color: #fafafa;
+        margin-right: 20px;
       }
 	</style>
 {% seo %}
@@ -31,10 +37,10 @@
           <h2 id="project_tagline">{{ site.description | default: site.github.project_tagline }}</h2>
 
           <ul class="links">
-            <li>Home</li>
-            <li>综合分析</li>
-            <li>工作数据</li>
-            <li>购房数据</li>
+            <li><a href="/getAwayBSG">Home</a></li>
+            <li><a href="/getAwayBSG/all.html">综合分析</a></li>
+            <li><a href="/getAwayBSG/job.html">工作数据</a></li>
+            <li><a href="/getAwayBSG/room.html">购房数据</a></li>
           </ul>
 
 
