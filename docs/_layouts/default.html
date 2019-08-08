@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" type="text/css" href="datatables.css"/>
+    <script type="text/javascript" src="datatables.js"></script>
 	<style>
 	a{text-decoration:none}
 	</style>
@@ -48,5 +50,11 @@
         ga('send', 'pageview');
       </script>
     {% endif %}
+
+      <script>
+        $(document).ready( function () {
+          $('table').DataTable();
+        } );
+      </script>
   </body>
 </html>

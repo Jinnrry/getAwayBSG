@@ -92,7 +92,7 @@ func crawlerOneCity(cityUrl string) {
 			if err != nil {
 				iUnitPrice = 0
 			}
-			db.Add(bson.M{"Title": title, "TotalePrice": iPrice, "UnitPrice": iUnitPrice, "Link": link, "listCrawlTime": time.Now()})
+			db.Add(bson.M{"zq_detail_status": 0, "Title": title, "TotalePrice": iPrice, "UnitPrice": iUnitPrice, "Link": link, "listCrawlTime": time.Now()})
 
 		})
 
@@ -231,7 +231,7 @@ func crawlDetail() (sucnum int) {
 				ttime = time.Now()
 			}
 
-			db.Update(element.Request.URL.String(), bson.M{"guapaitime": ttime, "detailCrawlTime": time.Now()})
+			db.Update(element.Request.URL.String(), bson.M{"zq_detail_status": 1, "guapaitime": ttime, "detailCrawlTime": time.Now()})
 		}
 	})
 
@@ -246,7 +246,7 @@ func crawlDetail() (sucnum int) {
 	lianjia := odb.Collection(configInfo["dbCollection"].(string))
 
 	//读取出全部需要抓取详情的数据
-	cur, err := lianjia.Find(ctx, bson.M{"detailCrawlTime": bson.M{"$exists": false}})
+	cur, err := lianjia.Find(ctx, bson.M{"zq_detail_status": 0})
 
 	if err != nil {
 		fmt.Println(err)

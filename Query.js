@@ -6,7 +6,8 @@ db.lianjia.aggregate([
 	{'$match': {"address.0": {$exists: true}}},
 	{
 		$group: {
-			_id: {"$arrayElemAt": ["$address", 0]},
+			_id: {$substr: ["$Link", 0, 22]},
+			city: {$first: "$address"},
 			count: {$sum: 1},
 			avg_UnitPrice: {$avg: "$UnitPrice"},
 			std: {$stdDevPop: "$UnitPrice"},
@@ -18,7 +19,8 @@ db.lianjia.aggregate([
 				count: 1,        //总数
 				avg_UnitPrice: 1, //每平米均价
 				std: 1,   //标准差
-				ratio: {$divide: ["$std", "$avg_UnitPrice"]} //标准差与均价的比值
+				ratio: {$divide: ["$std", "$avg_UnitPrice"]}, //标准差与均价的比值
+				city: {$slice: ['$city', 0, 1]}
 			}
 	},
 	{
@@ -32,7 +34,32 @@ db.zhilian.aggregate([
 	{'$match': {"workingExp.name": "1-3年"}},
 	{
 		$group: {
-			_id: {"$arrayElemAt": ["$city.items", 0]},
+			_id: {"$arrayElemAt": ["$city.items.name", 0]},
+			count: {$sum: 1},
+			avg: {$avg: "$avg"},
+			std: {$stdDevPop: "$avg"},
+		}
+	},
+	{
+		$project:
+			{
+				count: 1,   //总数
+				avg: 1, //平均薪资
+				std: 1,   //标准差
+				ratio: {$divide: ["$std", "$avg"]} //标准差与均价的比值
+			}
+	},
+	{
+		'$sort': {count: -1}
+	}
+]);
+
+
+// 薪资，按公司规模和城市分组
+db.zhilian.aggregate([
+	{
+		$group: {
+			_id: {city: {"$arrayElemAt": ["$city.items.name", 0]}, "公司规模": "$company.size.name"},
 			count: {$sum: 1},
 			avg: {$avg: "$avg"},
 			std: {$stdDevPop: "$avg"},
@@ -63,6 +90,7 @@ db.lianjia.aggregate([
 
 // 租房数据
 db.lianjia_zufang.aggregate([
+	{'$match': {"mianji": {$gt: 0}}},
 	{
 		$group: {
 			_id: "$city",
