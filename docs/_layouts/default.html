@@ -83,6 +83,14 @@
       <script>
         $(document).ready( function () {
           $('table').DataTable();
+
+          $("td").each(function () {
+	        	content = $(this).text();
+            if (!Number.isNaN(Number(content))) {
+              $(this).html(Number(content).toFixed(2));
+            }
+          })
+
         } );
       </script>
   </body>
