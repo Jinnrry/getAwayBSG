@@ -42,6 +42,7 @@ func Start_zhilian() {
 				res := get(apiUrl)
 				var mapResult map[string]interface{}
 				err = json.Unmarshal([]byte(res), &mapResult)
+
 				if err != nil {
 					fmt.Println("JsonToMapDemo err: ", err)
 				} else {
@@ -50,6 +51,13 @@ func Start_zhilian() {
 						numTotal := data["numTotal"]
 						total = int(numTotal.(float64))
 						results := data["results"].([]interface{})
+						for index := range results {
+							var itemTime string
+							loc, _ := time.LoadLocation("Local")
+							itemTime = results[index].(map[string]interface{})["updateDate"].(string)
+							results[index].(map[string]interface{})["updateDate"], _ = time.ParseInLocation("2006-01-02 15:04:05", itemTime, loc)
+							results[index].(map[string]interface{})["crawler_time"] = time.Now()
+						}
 						db.AddZLItem(results)
 					} else {
 						fmt.Println("接口返回错误！")

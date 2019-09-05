@@ -3,14 +3,28 @@
 
 // 房价均价查询语句
 db.lianjia.aggregate([
-	{'$match': {"address.0": {$exists: true}}},
+	{
+		'$match': {
+			$and: [
+				{ "address.0": { $exists: true } },
+				//统计数据的的时间区间，使用的挂牌时间统计
+				{
+					"guapaitime": {
+						$gt: ISODate("2019-07-01T00:00:00.000+0000"),
+						$lt: ISODate("2019-08-01T00:00:00.000+0000")
+					}
+				},
+				{ "address.0": "成都" }
+			]
+		},
+	},
 	{
 		$group: {
-			_id: {$substr: ["$Link", 0, 22]},
-			city: {$first: "$address"},
-			count: {$sum: 1},
-			avg_UnitPrice: {$avg: "$UnitPrice"},
-			std: {$stdDevPop: "$UnitPrice"},
+			_id: { $substr: ["$Link", 0, 22] },
+			city: { $first: "$address" },
+			count: { $sum: 1 },
+			avg_UnitPrice: { $avg: "$UnitPrice" },
+			std: { $stdDevPop: "$UnitPrice" },
 		}
 	},
 	{
@@ -19,12 +33,12 @@ db.lianjia.aggregate([
 				count: 1,        //总数
 				avg_UnitPrice: 1, //每平米均价
 				std: 1,   //标准差
-				ratio: {$divide: ["$std", "$avg_UnitPrice"]}, //标准差与均价的比值
-				city: {$slice: ['$city', 0, 1]}
+				ratio: { $divide: ["$std", "$avg_UnitPrice"] }, //标准差与均价的比值
+				city: { $slice: ['$city', 0, 1] }
 			}
 	},
 	{
-		'$sort': {count: -1}
+		'$sort': { count: -1 }
 	}
 ]);
 
@@ -113,3 +127,4 @@ db.lianjia_zufang.aggregate([
 		'$sort': {count: -1}
 	}
 ]);
+
